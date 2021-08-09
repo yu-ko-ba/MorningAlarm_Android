@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import com.example.morningalarm.android.databinding.FragmentFirstBinding
+import java.net.URL
 
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.
