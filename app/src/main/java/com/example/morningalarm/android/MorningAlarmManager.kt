@@ -8,7 +8,8 @@ import java.io.InputStreamReader
 import java.net.URL
 
 object MorningAlarmManager {
-    private val baseUrl: URL = URL("http://192.168.128.207:5000")
+//    private val baseUrl: URL = URL("http://192.168.128.207:5000")
+    private val baseUrl: URL = URL("http://131.213.50.133:5000")
 
     var firstFragment: FirstFragment? = null
 

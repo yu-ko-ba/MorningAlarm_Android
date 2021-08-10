@@ -1,15 +1,12 @@
 package com.example.morningalarm.android
 
-import CustomAdapter
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.morningalarm.android.databinding.FragmentFirstBinding
-import java.net.URL
 
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.
@@ -47,7 +44,7 @@ class FirstFragment : Fragment() {
         for (key in alarmList.keys()) {
             keys.add(key)
         }
-        binding.alarmsRecyclerView.adapter = CustomAdapter(keys.toList(), alarmList)
+        binding.alarmsRecyclerView.adapter = AlarmsAdapter(keys.toList(), alarmList)
     }
 
     override fun onDestroyView() {

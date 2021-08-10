@@ -34,31 +34,10 @@ class MainActivity : AppCompatActivity() {
 
             // recyclerViewの表示を更新する
             MorningAlarmManager.firstFragment?.setAdapter()
-
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show()
         }
 
         //test*
         println("-----------------------------")
-//        for (key in MorningAlarmManager.get().getJSONObject("data").keys()) {
-//            println(key)
-//        }
-//        println(MorningAlarmManager.get().getJSONObject("data").keys())
-//        val keys = arrayOf(MorningAlarmManager.get().getJSONObject("data").keys())
-//        println(MorningAlarmManager.get().getJSONObject("data").getString(keys[0].toString()))
-        val alarmList = MorningAlarmManager.get().getJSONObject("data")
-        println(alarmList.getString("00").javaClass)
-        println(alarmList.getString("00").javaClass.kotlin)
-//        println(MorningAlarmManager.get().toString(4))
-//        println()
-//        MorningAlarmManager.add("17:00")
-//        MorningAlarmManager.add("18:00")
-//        println(MorningAlarmManager.add("19:00").toString(4))
-//        println()
-//        println(MorningAlarmManager.delete("00").toString(4))
-//        println()
-//        println(MorningAlarmManager.change("02", "07:00").toString(4))
         println("-----------------------------")
         //*test
     }
