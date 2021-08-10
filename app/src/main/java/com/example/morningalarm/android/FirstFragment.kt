@@ -1,11 +1,13 @@
 package com.example.morningalarm.android
 
+import CustomAdapter
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.morningalarm.android.databinding.FragmentFirstBinding
 import java.net.URL
 
@@ -33,9 +35,12 @@ class FirstFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.buttonFirst.setOnClickListener {
-            findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
-        }
+        binding.alarmsRecyclerView.layoutManager = LinearLayoutManager(this.requireContext())
+        binding.alarmsRecyclerView.adapter = CustomAdapter(arrayOf("Hello, World!", "Hello, World!!", "Hello, World!!!"))
+//        binding.alarmsRecyclerView.adapter = CustomAdapter(MorningAlarmManager.get().getJSONObject("data"))
+//        binding.buttonFirst.setOnClickListener {
+//            findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
+//        }
     }
 
     override fun onDestroyView() {

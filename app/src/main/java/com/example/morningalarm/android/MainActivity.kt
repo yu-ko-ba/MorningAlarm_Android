@@ -29,23 +29,25 @@ class MainActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController, appBarConfiguration)
 
         binding.fab.setOnClickListener { view ->
+            // とりあえず仮置き
+            MorningAlarmManager.add("07:00")
+
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show()
         }
 
-
         //test*
-        println("-----------------------------")
-        println(MorningAlarmManager.get().toString(4))
-        println()
-        MorningAlarmManager.add("17:00")
-        MorningAlarmManager.add("18:00")
-        println(MorningAlarmManager.add("19:00").toString(4))
-        println()
-        println(MorningAlarmManager.delete("00").toString(4))
-        println()
-        println(MorningAlarmManager.change("02", "07:00").toString(4))
-        println("-----------------------------")
+//        println("-----------------------------")
+//        println(MorningAlarmManager.get().toString(4))
+//        println()
+//        MorningAlarmManager.add("17:00")
+//        MorningAlarmManager.add("18:00")
+//        println(MorningAlarmManager.add("19:00").toString(4))
+//        println()
+//        println(MorningAlarmManager.delete("00").toString(4))
+//        println()
+//        println(MorningAlarmManager.change("02", "07:00").toString(4))
+//        println("-----------------------------")
         //*test
     }
 
