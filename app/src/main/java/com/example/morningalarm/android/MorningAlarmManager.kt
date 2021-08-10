@@ -10,6 +10,7 @@ import java.net.URL
 object MorningAlarmManager {
     private val baseUrl: URL = URL("http://192.168.128.207:5000")
 
+    var firstFragment: FirstFragment? = null
 
     private fun getJsonString(url: URL): String {
         val json = runBlocking(Dispatchers.IO) {

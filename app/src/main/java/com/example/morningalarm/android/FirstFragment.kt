@@ -35,12 +35,19 @@ class FirstFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        MorningAlarmManager.firstFragment = this
+
+        setAdapter()
+    }
+
+    fun setAdapter() {
         binding.alarmsRecyclerView.layoutManager = LinearLayoutManager(this.requireContext())
-        binding.alarmsRecyclerView.adapter = CustomAdapter(arrayOf("Hello, World!", "Hello, World!!", "Hello, World!!!"))
-//        binding.alarmsRecyclerView.adapter = CustomAdapter(MorningAlarmManager.get().getJSONObject("data"))
-//        binding.buttonFirst.setOnClickListener {
-//            findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
-//        }
+        val alarmList = MorningAlarmManager.get().getJSONObject("data")
+        var keys = mutableListOf<String>()
+        for (key in alarmList.keys()) {
+            keys.add(key)
+        }
+        binding.alarmsRecyclerView.adapter = CustomAdapter(keys.toList(), alarmList)
     }
 
     override fun onDestroyView() {
