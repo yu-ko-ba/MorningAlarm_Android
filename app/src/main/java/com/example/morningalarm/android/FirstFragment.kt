@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.morningalarm.android.databinding.FragmentFirstBinding
+import org.json.JSONObject
 
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.
@@ -34,13 +35,12 @@ class FirstFragment : Fragment() {
 
         MorningAlarmManager.firstFragment = this
 
-        setAdapter()
+        setAdapter(MorningAlarmManager.get().getJSONObject("data"))
     }
 
-    fun setAdapter() {
+    fun setAdapter(alarmList: JSONObject) {
         binding.alarmsRecyclerView.layoutManager = LinearLayoutManager(this.requireContext())
-        val alarmList = MorningAlarmManager.get().getJSONObject("data")
-        var keys = mutableListOf<String>()
+        val keys = mutableListOf<String>()
         for (key in alarmList.keys()) {
             keys.add(key)
         }

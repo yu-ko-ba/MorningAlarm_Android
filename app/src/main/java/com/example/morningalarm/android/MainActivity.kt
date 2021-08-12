@@ -1,5 +1,6 @@
 package com.example.morningalarm.android
 
+import android.app.TimePickerDialog
 import android.os.Bundle
 import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
@@ -28,18 +29,13 @@ class MainActivity : AppCompatActivity() {
         appBarConfiguration = AppBarConfiguration(navController.graph)
         setupActionBarWithNavController(navController, appBarConfiguration)
 
-        binding.fab.setOnClickListener { view ->
-            // とりあえず仮置き
-            MorningAlarmManager.add("07:00")
+        binding.addButton.setOnClickListener { view ->
+            val timeSetListener = TimePickerDialog.OnTimeSetListener { view, hourOfDay, minute ->
+                MorningAlarmManager.firstFragment?.setAdapter(MorningAlarmManager.add(hourOfDay, minute).getJSONObject("data"))
+            }
 
-            // recyclerViewの表示を更新する
-            MorningAlarmManager.firstFragment?.setAdapter()
+            TimePickerDialog(this, timeSetListener, 7, 0, true).show()
         }
-
-        //test*
-        println("-----------------------------")
-        println("-----------------------------")
-        //*test
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -53,6 +49,10 @@ class MainActivity : AppCompatActivity() {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         return when (item.itemId) {
+            R.id.action_reload -> {
+                MorningAlarmManager.firstFragment?.setAdapter(MorningAlarmManager.get().getJSONObject("data"))
+                true
+            }
             R.id.action_settings -> true
             else -> super.onOptionsItemSelected(item)
         }

@@ -55,8 +55,8 @@ object MorningAlarmManager {
     }
 
 
-    fun add(setTime: String): JSONObject {
-        return parseJSON(getJsonString(URL("${baseUrl}/add/${setTime}")))
+    fun add(hour: Int, minute: Int): JSONObject {
+        return parseJSON(getJsonString(URL("${baseUrl}/add/${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}")))
     }
 
 
@@ -65,7 +65,7 @@ object MorningAlarmManager {
     }
 
 
-    fun change(id: String, newTime: String): JSONObject {
-        return parseJSON(getJsonString(URL("${baseUrl}/change/${id}/${newTime}")))
+    fun change(id: String, hour: Int, minute: Int): JSONObject {
+        return parseJSON(getJsonString(URL("${baseUrl}/change/${id}/${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}")))
     }
 }
