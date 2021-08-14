@@ -10,7 +10,8 @@
     android:layout_marginBottom="1dp"
     android:background="@color/design_default_color_background"
     android:elevation="2dp"
-    android:padding="6dp">
+    android:padding="6dp"
+    android:theme="@style/Theme.MorningAlarm">
 
     <Space
         android:layout_width="wrap_content"
@@ -23,7 +24,9 @@
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:textAlignment="center"
+        android:textColor="@color/primaryTextColor"
         android:textSize="34sp"
+        android:theme="@style/Theme.MorningAlarm"
         tools:text="00:00" />
 
     <Space
@@ -37,7 +40,7 @@
         android:layout_height="match_parent"
         android:layout_marginStart="6dp"
         android:layout_weight="1"
-        android:background="@color/purple_500"
+        android:background="@color/changeButtonBackground"
         app:srcCompat="@drawable/ic_baseline_settings_24" />
 
     <ImageButton
@@ -46,6 +49,6 @@
         android:layout_height="match_parent"
         android:layout_marginStart="6dp"
         android:layout_weight="1"
-        android:background="@color/design_default_color_error"
+        android:background="@color/deleteButtonBackground"
         app:srcCompat="@drawable/ic_baseline_delete_24" />
 </LinearLayout>
