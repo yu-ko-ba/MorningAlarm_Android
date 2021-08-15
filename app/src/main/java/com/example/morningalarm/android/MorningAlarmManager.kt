@@ -15,8 +15,11 @@ object MorningAlarmManager {
 
 
     private fun getBaseUrl(): String {
+        println("サーバーアドレス: ${serverAddress}")
+        println("ポート番号: ${portNumber}")
         return "http://${serverAddress}:${portNumber}"
     }
+
 
     private fun getJsonString(url: URL): String {
         val json = runBlocking(Dispatchers.IO) {
