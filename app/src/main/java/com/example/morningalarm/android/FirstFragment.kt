@@ -35,10 +35,10 @@ class FirstFragment : Fragment() {
 
         MorningAlarmManager.firstFragment = this
 
-        setAdapter(MorningAlarmManager.get().getJSONObject("data"))
+        setAdapter()
     }
 
-    fun setAdapter(alarmList: JSONObject) {
+    fun setAdapter(alarmList: JSONObject=MorningAlarmManager.get().getJSONObject("data")) {
         binding.alarmsRecyclerView.layoutManager = LinearLayoutManager(this.requireContext())
         val keys = mutableListOf<String>()
         for (key in alarmList.keys()) {

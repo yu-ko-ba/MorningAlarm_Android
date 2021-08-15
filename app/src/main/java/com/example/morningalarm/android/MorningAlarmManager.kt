@@ -8,10 +8,18 @@ import java.io.InputStreamReader
 import java.net.URL
 
 object MorningAlarmManager {
-//    private val baseUrl: URL = URL("http://192.168.128.207:5000")
-    private val baseUrl: URL = URL("http://131.213.50.133:5000")
+    var serverAddress = "192.168.128.207"
+    var portNumber = "5000"
 
     var firstFragment: FirstFragment? = null
+
+
+    private fun getBaseUrl(): String {
+        println("サーバーアドレス: ${serverAddress}")
+        println("ポート番号: ${portNumber}")
+        return "http://${serverAddress}:${portNumber}"
+    }
+
 
     private fun getJsonString(url: URL): String {
         val json = runBlocking(Dispatchers.IO) {
@@ -51,21 +59,21 @@ object MorningAlarmManager {
 
 
     fun get(): JSONObject {
-        return parseJSON(getJsonString(URL("${baseUrl}/list")))
+        return parseJSON(getJsonString(URL("${getBaseUrl()}/list")))
     }
 
 
     fun add(hour: Int, minute: Int): JSONObject {
-        return parseJSON(getJsonString(URL("${baseUrl}/add/${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}")))
+        return parseJSON(getJsonString(URL("${getBaseUrl()}/add/${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}")))
     }
 
 
     fun delete(id: String): JSONObject {
-        return parseJSON(getJsonString(URL("${baseUrl}/delete/${id}")))
+        return parseJSON(getJsonString(URL("${getBaseUrl()}/delete/${id}")))
     }
 
 
     fun change(id: String, hour: Int, minute: Int): JSONObject {
-        return parseJSON(getJsonString(URL("${baseUrl}/change/${id}/${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}")))
+        return parseJSON(getJsonString(URL("${getBaseUrl()}/change/${id}/${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}")))
     }
 }
