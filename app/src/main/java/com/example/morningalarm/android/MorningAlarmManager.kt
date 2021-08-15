@@ -15,8 +15,6 @@ object MorningAlarmManager {
 
 
     private fun getBaseUrl(): String {
-        println("サーバーアドレス: ${serverAddress}")
-        println("ポート番号: ${portNumber}")
         return "http://${serverAddress}:${portNumber}"
     }
 
@@ -47,7 +45,7 @@ object MorningAlarmManager {
 
 
     private fun parseJSON(json: String): JSONObject {
-        var jsonObject = JSONObject("{}")
+        var jsonObject = JSONObject("{\"data\":{}}")
         try {
             jsonObject = JSONObject(json)
             println("JSONのパースに成功しました")
