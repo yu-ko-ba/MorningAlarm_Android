@@ -84,7 +84,8 @@ object MorningAlarmManager {
 
 
     fun delete(id: String): JSONObject {
-        println("delete")
+        println("ID: ${id}")
+        println("deleted")
         return parseJSON(getJsonString(URL("${getBaseUrl()}/delete/${id}")))
     }
 

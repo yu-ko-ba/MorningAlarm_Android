@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.morningalarm.android.databinding.AlarmsRowItemBinding
 import org.json.JSONObject
 
-class AlarmsAdapter() :RecyclerView.Adapter<AlarmsAdapter.ViewHolder>() {
+class AlarmsAdapter :RecyclerView.Adapter<AlarmsAdapter.ViewHolder>() {
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val timeTextView: TextView

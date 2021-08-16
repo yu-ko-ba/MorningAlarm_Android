@@ -77,10 +77,8 @@ class FirstFragment : Fragment() {
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val position = viewHolder.layoutPosition
-                println(position)
-                println(MorningAlarmManager.getKeys()[position])
-                adapter.deleteItem(position)
-                setAdapter()
+                MorningAlarmManager.delete(MorningAlarmManager.getKeys()[position])
+                adapter.notifyItemRemoved(position)
             }
 
             override fun onChildDraw(
