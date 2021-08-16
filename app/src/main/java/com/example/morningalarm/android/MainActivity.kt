@@ -51,7 +51,9 @@ class MainActivity : AppCompatActivity() {
 
         binding.addButton.setOnClickListener { view ->
             val timeSetListener = TimePickerDialog.OnTimeSetListener { view, hourOfDay, minute ->
-                MorningAlarmManager.firstFragment?.setAdapter(MorningAlarmManager.add(hourOfDay, minute).getJSONObject("data"))
+//                MorningAlarmManager.firstFragment?.setAdapter(MorningAlarmManager.add(hourOfDay, minute).getJSONObject("data"))
+                MorningAlarmManager.add(hourOfDay, minute)
+                AlarmsAdapter.notifyItemInserted(MorningAlarmManager.getKeys().size - 1)
             }
 
             TimePickerDialog(this, timeSetListener, 7, 0, true).show()

@@ -52,7 +52,7 @@ class FirstFragment : Fragment() {
         for (key in alarmList.keys()) {
             keys.add(key)
         }
-        val adapter = AlarmsAdapter()
+        val adapter = AlarmsAdapter
 
         getSwipeActionHelper(adapter).attachToRecyclerView(binding.alarmsRecyclerView)
 
