@@ -115,8 +115,8 @@ class FirstFragment : Fragment() {
                 deleteIcon.setBounds(
                     itemView.left + iconMargin,
                     itemView.top + iconMargin,
-                    itemView.right + iconMargin + deleteIcon.intrinsicWidth,
-                    itemView.left + iconMargin
+                    itemView.left + iconMargin + deleteIcon.intrinsicWidth,
+                    itemView.bottom - iconMargin
                 )
 
                 background.draw(c)
