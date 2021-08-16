@@ -11,7 +11,19 @@ object MorningAlarmManager {
     var serverAddress = "192.168.128.207"
     var portNumber = "5000"
 
+    var data = get().getJSONObject("data")
+
     var firstFragment: FirstFragment? = null
+
+
+    fun getKeys(): List<String> {
+        val keys = mutableListOf<String>()
+        for (key in data.keys()) {
+            keys.add(key)
+        }
+
+        return keys.toList()
+    }
 
 
     private fun getBaseUrl(): String {
@@ -52,26 +64,33 @@ object MorningAlarmManager {
         } catch (e: Exception) {
             println("JSONのパースに失敗しました")
         }
+
+        data = jsonObject.getJSONObject("data")
+
         return jsonObject
     }
 
 
     fun get(): JSONObject {
+        println("get")
         return parseJSON(getJsonString(URL("${getBaseUrl()}/list")))
     }
 
 
     fun add(hour: Int, minute: Int): JSONObject {
+        println("add")
         return parseJSON(getJsonString(URL("${getBaseUrl()}/add/${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}")))
     }
 
 
     fun delete(id: String): JSONObject {
+        println("delete")
         return parseJSON(getJsonString(URL("${getBaseUrl()}/delete/${id}")))
     }
 
 
     fun change(id: String, hour: Int, minute: Int): JSONObject {
+        println("change")
         return parseJSON(getJsonString(URL("${getBaseUrl()}/change/${id}/${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}")))
     }
 }
