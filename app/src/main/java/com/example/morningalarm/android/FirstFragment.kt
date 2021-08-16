@@ -65,7 +65,7 @@ class FirstFragment : Fragment() {
     private fun getSwipeActionHelper(adapter: AlarmsAdapter) =
         ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(
             ItemTouchHelper.ACTION_STATE_IDLE,
-            ItemTouchHelper.LEFT
+            ItemTouchHelper.RIGHT
         ) {
             override fun onMove(
                 recyclerView: RecyclerView,
