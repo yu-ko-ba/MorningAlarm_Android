@@ -47,7 +47,8 @@ class AlarmsAdapter :RecyclerView.Adapter<AlarmsAdapter.ViewHolder>() {
 
     fun changeItem(context: Context, position: Int) {
         val timeSetListener = TimePickerDialog.OnTimeSetListener { view, hourOfDay, minute ->
-            MorningAlarmManager.firstFragment?.setAdapter(MorningAlarmManager.change(MorningAlarmManager.getKeys()[position], hourOfDay, minute).getJSONObject("data"))
+            MorningAlarmManager.change(MorningAlarmManager.getKeys()[position], hourOfDay, minute)
+            notifyItemChanged(position)
         }
 
         TimePickerDialog(context, timeSetListener, 7, 0, true).show()
