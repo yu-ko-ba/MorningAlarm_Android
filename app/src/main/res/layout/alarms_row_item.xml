@@ -40,7 +40,7 @@
         android:layout_height="match_parent"
         android:layout_marginStart="6dp"
         android:layout_weight="1"
-        android:background="@color/changeButtonBackground"
+        android:background="@color/design_default_color_primary"
         app:srcCompat="@drawable/ic_baseline_settings_24" />
 
     <ImageButton
@@ -49,6 +49,6 @@
         android:layout_height="match_parent"
         android:layout_marginStart="6dp"
         android:layout_weight="1"
-        android:background="@color/deleteButtonBackground"
+        android:background="@color/design_default_color_error"
         app:srcCompat="@drawable/ic_baseline_delete_24" />
 </LinearLayout>
