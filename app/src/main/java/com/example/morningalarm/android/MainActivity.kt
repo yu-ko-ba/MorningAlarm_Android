@@ -81,7 +81,7 @@ class MainActivity : AppCompatActivity() {
                 view.findViewById<EditText>(R.id.serverAddress).hint = MorningAlarmManager.serverAddress
                 view.findViewById<EditText>(R.id.portNumber).hint = MorningAlarmManager.portNumber
 
-                val dialog = AlertDialog.Builder(this)
+                AlertDialog.Builder(this)
                     .setTitle("設定")
                     .setView(view)
                     .setPositiveButton("OK", DialogInterface.OnClickListener { dialog, id ->
