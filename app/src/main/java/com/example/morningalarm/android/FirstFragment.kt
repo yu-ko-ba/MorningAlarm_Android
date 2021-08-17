@@ -88,6 +88,8 @@ class FirstFragment : Fragment() {
                         }
                         TimePickerDialog(viewHolder.itemView.context, timeSetListener, 7, 0, true)
                             .show()
+
+                        adapter.notifyItemChanged(position)
                     }
                     ItemTouchHelper.RIGHT -> {
                         // アラームを削除する
