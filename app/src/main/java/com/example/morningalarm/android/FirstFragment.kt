@@ -86,6 +86,7 @@ class FirstFragment : Fragment() {
                             MorningAlarmManager.change(MorningAlarmManager.getKeys()[position], hourOfDay, minute)
                             adapter.notifyItemChanged(position)
                         }
+
                         TimePickerDialog(viewHolder.itemView.context, timeSetListener, 7, 0, true)
                             .show()
 

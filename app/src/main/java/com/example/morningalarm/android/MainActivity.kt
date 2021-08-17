@@ -2,8 +2,8 @@ package com.example.morningalarm.android
 
 import android.annotation.SuppressLint
 import android.app.AlarmManager
-import android.app.AlertDialog
 import android.app.TimePickerDialog
+//import android.app.AlertDialog
 import android.content.Context
 import android.content.DialogInterface
 import android.content.SharedPreferences
@@ -18,6 +18,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.EditText
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import com.example.morningalarm.android.databinding.ActivityMainBinding
 import com.example.morningalarm.android.databinding.DialogSettingsBinding
@@ -51,11 +52,9 @@ class MainActivity : AppCompatActivity() {
 
         binding.addButton.setOnClickListener { view ->
             val timeSetListener = TimePickerDialog.OnTimeSetListener { view, hourOfDay, minute ->
-//                MorningAlarmManager.firstFragment?.setAdapter(MorningAlarmManager.add(hourOfDay, minute).getJSONObject("data"))
                 MorningAlarmManager.add(hourOfDay, minute)
                 AlarmsAdapter.notifyItemInserted(MorningAlarmManager.getKeys().size - 1)
             }
-
             TimePickerDialog(this, timeSetListener, 7, 0, true).show()
         }
     }
@@ -82,7 +81,7 @@ class MainActivity : AppCompatActivity() {
                 view.findViewById<EditText>(R.id.serverAddress).hint = MorningAlarmManager.serverAddress
                 view.findViewById<EditText>(R.id.portNumber).hint = MorningAlarmManager.portNumber
 
-                AlertDialog.Builder(this)
+                val dialog = AlertDialog.Builder(this)
                     .setTitle("設定")
                     .setView(view)
                     .setPositiveButton("OK", DialogInterface.OnClickListener { dialog, id ->
