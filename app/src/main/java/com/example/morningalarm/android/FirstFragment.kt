@@ -1,5 +1,6 @@
 package com.example.morningalarm.android
 
+import android.app.TimePickerDialog
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -65,7 +66,7 @@ class FirstFragment : Fragment() {
     private fun getSwipeActionHelper(adapter: AlarmsAdapter) =
         ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(
             ItemTouchHelper.ACTION_STATE_IDLE,
-            ItemTouchHelper.RIGHT
+            ItemTouchHelper.RIGHT or ItemTouchHelper.LEFT
         ) {
             override fun onMove(
                 recyclerView: RecyclerView,
@@ -77,8 +78,24 @@ class FirstFragment : Fragment() {
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val position = viewHolder.layoutPosition
-                MorningAlarmManager.delete(MorningAlarmManager.getKeys()[position])
-                adapter.notifyItemRemoved(position)
+
+                when (direction) {
+                    ItemTouchHelper.LEFT -> {
+                        // 時間を変更する
+                        val timeSetListener = TimePickerDialog.OnTimeSetListener { view, hourOfDay, minute ->
+                            MorningAlarmManager.change(MorningAlarmManager.getKeys()[position], hourOfDay, minute)
+                            adapter.notifyItemChanged(position)
+                        }
+                        TimePickerDialog(viewHolder.itemView.context, timeSetListener, 7, 0, true)
+                            .show()
+                    }
+                    ItemTouchHelper.RIGHT -> {
+                        // アラームを削除する
+                        MorningAlarmManager.delete(MorningAlarmManager.getKeys()[position])
+                        adapter.notifyItemRemoved(position)
+                    }
+                }
+
             }
 
             override fun onChildDraw(
@@ -100,27 +117,53 @@ class FirstFragment : Fragment() {
                     isCurrentlyActive
                 )
 
+                println("dX: ${dX}")
+
                 val itemView = viewHolder.itemView
+                if (dX < 0) {
+                    // 変更するとき
+                    val background = ColorDrawable(Color.MAGENTA)
+                    background.setBounds(
+                        itemView.left + dX.toInt(),
+                        itemView.top,
+                        itemView.right,
+                        itemView.bottom
+                    )
 
-                val background = ColorDrawable(Color.RED)
-                background.setBounds(
-                    itemView.left,
-                    itemView.top,
-                    itemView.right + dX.toInt(),
-                    itemView.bottom
-                )
+                    val changeIcon = AppCompatResources.getDrawable(this@FirstFragment.requireContext(), R.drawable.ic_baseline_settings_24)!!
+                    val iconMargin = (itemView.height - changeIcon.intrinsicHeight) / 2
+                    changeIcon.setBounds(
+                        itemView.right - iconMargin - changeIcon.intrinsicWidth,
+                        itemView.top + iconMargin,
+                        itemView.right - iconMargin,
+                        itemView.bottom - iconMargin
+                    )
 
-                val deleteIcon = AppCompatResources.getDrawable(this@FirstFragment.requireContext(), R.drawable.ic_baseline_delete_24)!!
-                val iconMargin = (itemView.height - deleteIcon.intrinsicHeight) / 2
-                deleteIcon.setBounds(
-                    itemView.left + iconMargin,
-                    itemView.top + iconMargin,
-                    itemView.left + iconMargin + deleteIcon.intrinsicWidth,
-                    itemView.bottom - iconMargin
-                )
+                    background.draw(c)
+                    changeIcon.draw(c)
+                } else {
+                    // 削除するとき
+                    val background = ColorDrawable(Color.RED)
+                    background.setBounds(
+                        itemView.left,
+                        itemView.top,
+                        itemView.right + dX.toInt(),
+                        itemView.bottom
+                    )
 
-                background.draw(c)
-                deleteIcon.draw(c)
+                    val deleteIcon = AppCompatResources.getDrawable(this@FirstFragment.requireContext(), R.drawable.ic_baseline_delete_24)!!
+                    val iconMargin = (itemView.height - deleteIcon.intrinsicHeight) / 2
+                    deleteIcon.setBounds(
+                        itemView.left + iconMargin,
+                        itemView.top + iconMargin,
+                        itemView.left + iconMargin + deleteIcon.intrinsicWidth,
+                        itemView.bottom - iconMargin
+                    )
+
+                    background.draw(c)
+                    deleteIcon.draw(c)
+                }
+
             }
         })
 

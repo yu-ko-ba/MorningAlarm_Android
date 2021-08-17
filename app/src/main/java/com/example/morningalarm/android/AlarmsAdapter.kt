@@ -34,14 +34,6 @@ object AlarmsAdapter :RecyclerView.Adapter<AlarmsAdapter.ViewHolder>() {
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.timeTextView.text = MorningAlarmManager.data.getString(MorningAlarmManager.getKeys()[position])
-
-        binding.changeButton.setOnClickListener {
-            changeItem(it.context, position)
-        }
-
-        binding.deleteButton.setOnClickListener {
-            deleteItem(position)
-        }
     }
 
 

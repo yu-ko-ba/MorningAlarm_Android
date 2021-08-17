@@ -13,42 +13,16 @@
     android:padding="6dp"
     android:theme="@style/Theme.MorningAlarm">
 
-    <Space
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_weight="1" />
-
     <TextView
         android:id="@+id/timeTextView"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:textAlignment="center"
+        android:paddingStart="20dp"
+        android:textAlignment="textStart"
         android:textColor="@color/primaryTextColor"
         android:textSize="34sp"
         android:theme="@style/Theme.MorningAlarm"
         tools:text="00:00" />
 
-    <Space
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_weight="1" />
-
-    <ImageButton
-        android:id="@+id/changeButton"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_marginStart="6dp"
-        android:layout_weight="1"
-        android:background="@color/design_default_color_primary"
-        app:srcCompat="@drawable/ic_baseline_settings_24" />
-
-    <ImageButton
-        android:id="@+id/deleteButton"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_marginStart="6dp"
-        android:layout_weight="1"
-        android:background="@color/design_default_color_error"
-        app:srcCompat="@drawable/ic_baseline_delete_24" />
 </LinearLayout>
