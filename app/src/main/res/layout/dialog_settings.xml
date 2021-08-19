@@ -10,14 +10,14 @@
         android:id="@+id/textView2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="サーバーアドレス" />
+        android:text="@string/server_address" />
 
     <EditText
         android:id="@+id/serverAddress"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:hint="192.168.128.207"
+        android:hint="@string/default_server_address"
         android:inputType="textPersonName"
         android:minHeight="48dp" />
 
@@ -25,14 +25,14 @@
         android:id="@+id/textView3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="ポート番号" />
+        android:text="@string/port_number" />
 
     <EditText
         android:id="@+id/portNumber"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:hint="5000"
+        android:hint="@string/default_port_number"
         android:inputType="numberDecimal"
         android:minHeight="48dp" />
 </LinearLayout>

@@ -6,7 +6,7 @@
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.14895833333333333" />
         <entry key="app/src/main/res/layout/alarms_row_item.xml" value="0.21784420289855072" />
         <entry key="app/src/main/res/layout/content_main.xml" value="0.21195652173913043" />
-        <entry key="app/src/main/res/layout/dialog_settings.xml" value="0.18704710144927536" />
+        <entry key="app/src/main/res/layout/dialog_settings.xml" value="0.375" />
         <entry key="app/src/main/res/layout/dialog_signin.xml" value="0.18704710144927536" />
         <entry key="app/src/main/res/layout/fragment_first.xml" value="0.14895833333333333" />
         <entry key="app/src/main/res/layout/fragment_second.xml" value="0.21195652173913043" />

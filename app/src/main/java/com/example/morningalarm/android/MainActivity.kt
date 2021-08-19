@@ -78,24 +78,29 @@ class MainActivity : AppCompatActivity() {
                 AlertDialog.Builder(this)
                     .setTitle("設定")
                     .setView(view)
-                    .setPositiveButton("OK", DialogInterface.OnClickListener { dialog, id ->
-                        val serverAddress = view.findViewById<EditText>(R.id.serverAddress).text.toString()
-                        val portNumber = view.findViewById<EditText>(R.id.portNumber).text.toString()
+                    .setPositiveButton("OK") { _, _ ->
+                        val serverAddress =
+                            view.findViewById<EditText>(R.id.serverAddress).text.toString()
+                        val portNumber =
+                            view.findViewById<EditText>(R.id.portNumber).text.toString()
 
                         if (serverAddress != "") {
                             MorningAlarmManager.serverAddress = serverAddress
-                            sharedPreferences.edit().putString(getString(R.string.server_address_key), serverAddress).apply()
+                            sharedPreferences.edit()
+                                .putString(getString(R.string.server_address_key), serverAddress)
+                                .apply()
                         }
                         if (portNumber != "") {
                             MorningAlarmManager.portNumber = portNumber
-                            sharedPreferences.edit().putString(getString(R.string.port_number_key), portNumber).apply()
+                            sharedPreferences.edit()
+                                .putString(getString(R.string.port_number_key), portNumber).apply()
                         }
 
                         MorningAlarmManager.firstFragment?.setAdapter()
-                    })
-                    .setNegativeButton("Chancel", DialogInterface.OnClickListener { dialog, id ->
+                    }
+                    .setNegativeButton("Chancel") { dialog, _ ->
                         dialog.cancel()
-                    })
+                    }
                     .show()
                 true
             }

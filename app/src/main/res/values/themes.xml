@@ -12,6 +12,7 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
+        <item name="alertDialogTheme">@style/Theme.MorningAlarm.Dialog</item>
     </style>
 
     <style name="Theme.MorningAlarm.NoActionBar">
@@ -24,6 +25,12 @@
     <style name="Theme.MorningAlarm.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
     <style name="Theme.MorningAlarm.Dialog.Button" parent="Widget.AppCompat.Button.ButtonBar.AlertDialog">
+        <item name="android:textColor">@color/secondaryDarkColor</item>
         <item name="android:backgroundTint">@color/white</item>
+    </style>
+
+    <style name="Theme.MorningAlarm.Dialog" parent="ThemeOverlay.AppCompat.Dialog.Alert">
+        <item name="buttonBarPositiveButtonStyle">@style/Theme.MorningAlarm.Dialog.Button</item>
+        <item name="buttonBarNegativeButtonStyle">@style/Theme.MorningAlarm.Dialog.Button</item>
     </style>
 </resources>
