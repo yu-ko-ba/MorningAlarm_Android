@@ -42,7 +42,7 @@ class MainActivity : AppCompatActivity() {
         appBarConfiguration = AppBarConfiguration(navController.graph)
         setupActionBarWithNavController(navController, appBarConfiguration)
 
-        binding.addButton.setOnClickListener { view ->
+        binding.addButton.setOnClickListener {
             val dialog = TimePickerDialogFragment(this, 7, 0, true)
             dialog.setOnTimeSetListener { hourOfDay, minute ->
                 MorningAlarmManager.add(hourOfDay, minute)
@@ -75,9 +75,9 @@ class MainActivity : AppCompatActivity() {
                 view.findViewById<EditText>(R.id.portNumber).hint = MorningAlarmManager.portNumber
 
                 AlertDialog.Builder(this)
-                    .setTitle("設定")
+                    .setTitle(getString(R.string.setting_dialog_title))
                     .setView(view)
-                    .setPositiveButton("OK") { _, _ ->
+                    .setPositiveButton(getString(R.string.ok)) { _, _ ->
                         val serverAddress =
                             view.findViewById<EditText>(R.id.serverAddress).text.toString()
                         val portNumber =
@@ -97,7 +97,7 @@ class MainActivity : AppCompatActivity() {
 
                         MorningAlarmManager.firstFragment?.setAdapter()
                     }
-                    .setNegativeButton("Chancel") { dialog, _ ->
+                    .setNegativeButton(getString(R.string.cancel)) { dialog, _ ->
                         dialog.cancel()
                     }
                     .show()
