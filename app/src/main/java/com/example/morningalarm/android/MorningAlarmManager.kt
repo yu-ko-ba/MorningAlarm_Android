@@ -38,7 +38,7 @@ object MorningAlarmManager {
 
 
     private fun getJsonString(url: URL): String {
-        val json = runBlocking(Dispatchers.IO) {
+        return runBlocking(Dispatchers.IO) {
             var json = ""
             for (count in 0..2) {
                 try {
@@ -46,7 +46,7 @@ object MorningAlarmManager {
                     json = runBlocking(Dispatchers.Default) {
                         var json = ""
                         for (line in br.lines()) {
-                             json += line
+                            json += line
                         }
                         json
                     }
@@ -58,7 +58,6 @@ object MorningAlarmManager {
             }
             json
         }
-        return json
     }
 
 
