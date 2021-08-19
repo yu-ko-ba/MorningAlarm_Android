@@ -8,6 +8,7 @@ import java.io.InputStreamReader
 import java.net.URL
 
 object MorningAlarmManager {
+
     var serverAddress = "192.168.128.207"
     var portNumber = "5000"
 

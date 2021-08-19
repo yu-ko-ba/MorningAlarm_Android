@@ -1,14 +1,11 @@
 package com.example.morningalarm.android
 
-import android.app.TimePickerDialog
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.morningalarm.android.databinding.AlarmsRowItemBinding
-import org.json.JSONObject
 
 object AlarmsAdapter :RecyclerView.Adapter<AlarmsAdapter.ViewHolder>() {
 
@@ -19,6 +16,7 @@ object AlarmsAdapter :RecyclerView.Adapter<AlarmsAdapter.ViewHolder>() {
             timeTextView = view.findViewById(R.id.timeTextView)
         }
     }
+
 
     private lateinit var binding: AlarmsRowItemBinding
 
@@ -34,21 +32,6 @@ object AlarmsAdapter :RecyclerView.Adapter<AlarmsAdapter.ViewHolder>() {
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.timeTextView.text = MorningAlarmManager.data.getString(MorningAlarmManager.getKeys()[position])
-    }
-
-
-    fun changeItem(context: Context, position: Int) {
-        val timeSetListener = TimePickerDialog.OnTimeSetListener { view, hourOfDay, minute ->
-            MorningAlarmManager.change(MorningAlarmManager.getKeys()[position], hourOfDay, minute)
-            notifyItemChanged(position)
-        }
-
-        TimePickerDialog(context, timeSetListener, 7, 0, true).show()
-    }
-
-
-    fun deleteItem(position: Int) {
-        MorningAlarmManager.firstFragment?.setAdapter(MorningAlarmManager.delete(MorningAlarmManager.getKeys()[position]).getJSONObject("data"))
     }
 
 

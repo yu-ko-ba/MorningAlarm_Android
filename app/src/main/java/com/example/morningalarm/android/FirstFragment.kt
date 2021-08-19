@@ -1,6 +1,5 @@
 package com.example.morningalarm.android
 
-import android.app.TimePickerDialog
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -27,6 +26,7 @@ class FirstFragment : Fragment() {
     // onDestroyView.
     private val binding get() = _binding!!
 
+
     override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?,
             savedInstanceState: Bundle?
@@ -37,6 +37,7 @@ class FirstFragment : Fragment() {
 
     }
 
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -44,6 +45,7 @@ class FirstFragment : Fragment() {
 
         setAdapter()
     }
+
 
     fun setAdapter(alarmList: JSONObject=MorningAlarmManager.get().getJSONObject("data")) {
         MorningAlarmManager.firstFragment = this
@@ -58,8 +60,6 @@ class FirstFragment : Fragment() {
         getSwipeActionHelper(adapter).attachToRecyclerView(binding.alarmsRecyclerView)
 
         binding.alarmsRecyclerView.adapter = adapter
-
-        println("setAdapter")
     }
 
 
@@ -68,6 +68,7 @@ class FirstFragment : Fragment() {
             ItemTouchHelper.ACTION_STATE_IDLE,
             ItemTouchHelper.RIGHT or ItemTouchHelper.LEFT
         ) {
+
             override fun onMove(
                 recyclerView: RecyclerView,
                 viewHolder: RecyclerView.ViewHolder,
@@ -75,6 +76,7 @@ class FirstFragment : Fragment() {
             ): Boolean {
                 return false
             }
+
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val position = viewHolder.layoutPosition
@@ -100,6 +102,7 @@ class FirstFragment : Fragment() {
 
             }
 
+
             override fun onChildDraw(
                 c: Canvas,
                 recyclerView: RecyclerView,
@@ -118,9 +121,6 @@ class FirstFragment : Fragment() {
                     actionState,
                     isCurrentlyActive
                 )
-
-                println("dX: ${dX}")
-
                 val itemView = viewHolder.itemView
                 if (dX < 0) {
                     // 変更するとき

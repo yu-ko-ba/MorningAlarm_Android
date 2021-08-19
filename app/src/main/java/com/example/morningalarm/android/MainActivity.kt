@@ -2,7 +2,6 @@ package com.example.morningalarm.android
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.content.DialogInterface
 import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -67,7 +66,7 @@ class MainActivity : AppCompatActivity() {
         return when (item.itemId) {
             R.id.action_reload -> {
                 MorningAlarmManager.firstFragment?.setAdapter(MorningAlarmManager.get().getJSONObject("data"))
-                applicationContext
+
                 true
             }
             R.id.action_settings -> {
