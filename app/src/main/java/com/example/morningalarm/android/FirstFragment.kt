@@ -82,15 +82,14 @@ class FirstFragment : Fragment() {
                 when (direction) {
                     ItemTouchHelper.LEFT -> {
                         // 時間を変更する
-                        val timeSetListener = TimePickerDialog.OnTimeSetListener { view, hourOfDay, minute ->
+                        val dialog = TimePickerDialogFragment(requireContext(), 7, 0, true)
+                        dialog.setOnTimeSetListener { hourOfDay, minute ->
                             MorningAlarmManager.change(MorningAlarmManager.getKeys()[position], hourOfDay, minute)
                             adapter.notifyItemChanged(position)
                         }
+                        dialog.show(childFragmentManager)
 
-                        TimePickerDialog(viewHolder.itemView.context, timeSetListener, 7, 0, true)
-                            .show()
-
-                        adapter.notifyItemChanged(position)
+                        MorningAlarmManager.firstFragment?.setAdapter(MorningAlarmManager.get().getJSONObject("data"))
                     }
                     ItemTouchHelper.RIGHT -> {
                         // アラームを削除する
