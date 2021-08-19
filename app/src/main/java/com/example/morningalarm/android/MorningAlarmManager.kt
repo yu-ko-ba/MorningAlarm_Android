@@ -14,8 +14,6 @@ object MorningAlarmManager {
 
     private var data = get().getJSONObject("data")
 
-    var firstFragment: FirstFragment? = null
-
 
     fun getData(): JSONObject {
         return data

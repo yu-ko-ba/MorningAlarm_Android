@@ -1,5 +1,6 @@
 package com.example.morningalarm.android
 
+import android.annotation.SuppressLint
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -41,15 +42,11 @@ class FirstFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        MorningAlarmManager.firstFragment = this
-
         setAdapter()
     }
 
 
     fun setAdapter(alarmList: JSONObject=MorningAlarmManager.get().getJSONObject("data")) {
-        MorningAlarmManager.firstFragment = this
-
         binding.alarmsRecyclerView.layoutManager = LinearLayoutManager(this.requireContext())
         val keys = mutableListOf<String>()
         for (key in alarmList.keys()) {
@@ -78,6 +75,7 @@ class FirstFragment : Fragment() {
             }
 
 
+            @SuppressLint("NotifyDataSetChanged")
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val position = viewHolder.layoutPosition
 
@@ -91,7 +89,7 @@ class FirstFragment : Fragment() {
                         }
                         dialog.show(childFragmentManager)
 
-                        MorningAlarmManager.firstFragment?.setAdapter(MorningAlarmManager.get().getJSONObject("data"))
+                        adapter.notifyDataSetChanged()
                     }
                     ItemTouchHelper.RIGHT -> {
                         // アラームを削除する

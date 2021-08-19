@@ -58,14 +58,15 @@ class MainActivity : AppCompatActivity() {
         return true
     }
 
-    @SuppressLint("CutPasteId")
+    @SuppressLint("CutPasteId", "NotifyDataSetChanged")
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         return when (item.itemId) {
             R.id.action_reload -> {
-                MorningAlarmManager.firstFragment?.setAdapter(MorningAlarmManager.get().getJSONObject("data"))
+                MorningAlarmManager.get()
+                AlarmsAdapter.notifyDataSetChanged()
 
                 true
             }
@@ -95,7 +96,8 @@ class MainActivity : AppCompatActivity() {
                                 .putString(getString(R.string.port_number_key), portNumber).apply()
                         }
 
-                        MorningAlarmManager.firstFragment?.setAdapter()
+                        MorningAlarmManager.get()
+                        AlarmsAdapter.notifyDataSetChanged()
                     }
                     .setNegativeButton(getString(R.string.cancel)) { dialog, _ ->
                         dialog.cancel()
