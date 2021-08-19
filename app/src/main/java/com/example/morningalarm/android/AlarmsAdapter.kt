@@ -31,7 +31,7 @@ object AlarmsAdapter :RecyclerView.Adapter<AlarmsAdapter.ViewHolder>() {
 
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.timeTextView.text = MorningAlarmManager.data.getString(MorningAlarmManager.getKeys()[position])
+        holder.timeTextView.text = MorningAlarmManager.getData().getString(MorningAlarmManager.getKeys()[position])
     }
 
 

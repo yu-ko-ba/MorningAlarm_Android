@@ -12,9 +12,14 @@ object MorningAlarmManager {
     var serverAddress = "192.168.128.207"
     var portNumber = "5000"
 
-    var data = get().getJSONObject("data")
+    private var data = get().getJSONObject("data")
 
     var firstFragment: FirstFragment? = null
+
+
+    fun getData(): JSONObject {
+        return data
+    }
 
 
     fun getKeys(): List<String> {
@@ -62,11 +67,11 @@ object MorningAlarmManager {
         try {
             jsonObject = JSONObject(json)
             println("JSONのパースに成功しました")
+
+            data = jsonObject.getJSONObject("data")
         } catch (e: Exception) {
             println("JSONのパースに失敗しました")
         }
-
-        data = jsonObject.getJSONObject("data")
 
         return jsonObject
     }
