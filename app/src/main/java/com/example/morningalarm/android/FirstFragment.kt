@@ -122,7 +122,7 @@ class FirstFragment : Fragment() {
                 val itemView = viewHolder.itemView
                 if (dX < 0) {
                     // 変更するとき
-                    val background = ColorDrawable(Color.MAGENTA)
+                    val background = ColorDrawable(Color.LTGRAY)
                     background.setBounds(
                         itemView.left + dX.toInt(),
                         itemView.top,
