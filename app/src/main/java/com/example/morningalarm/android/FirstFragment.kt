@@ -5,10 +5,8 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -45,7 +43,24 @@ class FirstFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setHasOptionsMenu(true)
+
+        binding.swipeRefreshLayout.setOnRefreshListener {
+            refreshItems()
+        }
+
         setAdapter()
+    }
+
+
+    @SuppressLint("NotifyDataSetChanged")
+    private fun refreshItems() {
+        MorningAlarmManager.get {
+            binding.swipeRefreshLayout.isRefreshing = false
+            CoroutineScope(Dispatchers.Main).launch {
+                AlarmsAdapter.notifyDataSetChanged()
+            }
+        }
     }
 
 
@@ -60,6 +75,19 @@ class FirstFragment : Fragment() {
         getSwipeActionHelper(adapter).attachToRecyclerView(binding.alarmsRecyclerView)
 
         binding.alarmsRecyclerView.adapter = adapter
+    }
+
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.action_refresh -> {
+                binding.swipeRefreshLayout.isRefreshing = true
+                refreshItems()
+
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 
 

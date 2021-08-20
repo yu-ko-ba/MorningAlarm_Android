@@ -83,17 +83,6 @@ class MainActivity : AppCompatActivity() {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         return when (item.itemId) {
-            R.id.action_reload -> {
-                MorningAlarmManager.get {
-                    CoroutineScope(Dispatchers.Main).launch {
-                        AlarmsAdapter.notifyDataSetChanged()
-                        Snackbar.make(binding.addButton, "データの取得に成功しました！", Snackbar.LENGTH_LONG)
-                            .show()
-                    }
-                }
-
-                true
-            }
             R.id.action_settings -> {
                 val view = this.layoutInflater.inflate(R.layout.dialog_settings, null)
                 view.findViewById<EditText>(R.id.serverAddress).hint = MorningAlarmManager.serverAddress
