@@ -12,10 +12,9 @@ object MorningAlarmManager {
     var serverAddress = "192.168.128.207"
     var portNumber = "5000"
 
-    private var onSucceeded: () -> Unit = {}
-    private var onFailed: () -> Unit = {}
-
     private var data = JSONObject("{\"data\":{}}")
+
+    private var onFailed: () -> Unit = {}
 
 
     fun getData(): JSONObject {
@@ -33,11 +32,6 @@ object MorningAlarmManager {
     }
 
 
-    fun setOnSucceeded(action: () -> Unit) {
-        onSucceeded = action
-    }
-
-
     fun setOnFailed(action: () -> Unit) {
         onFailed = action
     }
@@ -49,8 +43,7 @@ object MorningAlarmManager {
 
 
     private fun getJsonString(url: URL): String {
-        var succeeded = false
-        val json = runBlocking(Dispatchers.IO) {
+        return runBlocking(Dispatchers.IO) {
             var json = ""
             for (count in 0..2) {
                 try {
@@ -63,7 +56,6 @@ object MorningAlarmManager {
                         s
                     }
                     println("JSONの取得に成功しました")
-                    succeeded = true
                     break
                 } catch (e: Exception) {
                     println("JSONの取得に失敗しました")
@@ -71,52 +63,45 @@ object MorningAlarmManager {
             }
             json
         }
-
-        if (succeeded) {
-            onSucceeded()
-        } else {
-            onFailed()
-        }
-        onSucceeded()
-
-        return json
     }
 
 
-    private fun parseJSON(json: String): JSONObject? {
+    private fun parseJSON(json: String, onSucceedListener: () -> Unit = {}): JSONObject? {
         var jsonObject: JSONObject? = null
         try {
             jsonObject = JSONObject(json)
             println("JSONのパースに成功しました")
+            onSucceedListener()
         } catch (e: Exception) {
             println("JSONのパースに失敗しました")
+            onFailed()
         }
 
         return jsonObject
     }
 
 
-    fun get(): JSONObject {
+    fun get(onSucceedListener: () -> Unit = {}): JSONObject {
         println("get")
-        return parseJSON(getJsonString(URL("${getBaseUrl()}/list")))?.getJSONObject("data") ?: data
+        return parseJSON(getJsonString(URL("${getBaseUrl()}/list")), onSucceedListener)?.getJSONObject("data") ?: data
     }
 
 
-    fun add(hour: Int, minute: Int): JSONObject {
+    fun add(hour: Int, minute: Int, onSucceedListener: () -> Unit = {}): JSONObject {
         println("add")
-        return parseJSON(getJsonString(URL("${getBaseUrl()}/add/${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}")))?.getJSONObject("data") ?: data
+        return parseJSON(getJsonString(URL("${getBaseUrl()}/add/${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}")), onSucceedListener)?.getJSONObject("data") ?: data
     }
 
 
-    fun delete(id: String): JSONObject {
+    fun delete(id: String, onSucceedListener: () -> Unit = {}): JSONObject {
         println("ID: $id")
         println("deleted")
-        return parseJSON(getJsonString(URL("${getBaseUrl()}/delete/${id}")))?.getJSONObject("data") ?: data
+        return parseJSON(getJsonString(URL("${getBaseUrl()}/delete/${id}")), onSucceedListener)?.getJSONObject("data") ?: data
     }
 
 
-    fun change(id: String, hour: Int, minute: Int): JSONObject {
+    fun change(id: String, hour: Int, minute: Int, onSucceedListener: () -> Unit = {}): JSONObject {
         println("change")
-        return parseJSON(getJsonString(URL("${getBaseUrl()}/change/${id}/${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}")))?.getJSONObject("data") ?: data
+        return parseJSON(getJsonString(URL("${getBaseUrl()}/change/${id}/${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}")), onSucceedListener)?.getJSONObject("data") ?: data
     }
 }

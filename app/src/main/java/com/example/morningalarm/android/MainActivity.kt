@@ -39,10 +39,6 @@ class MainActivity : AppCompatActivity() {
             MorningAlarmManager.portNumber = it
         }
 
-        MorningAlarmManager.setOnSucceeded {
-            Snackbar.make(binding.addButton, "データの取得に成功しました！", Snackbar.LENGTH_LONG)
-                .show()
-        }
         MorningAlarmManager.setOnFailed {
             Snackbar.make(binding.addButton, "データの取得に失敗しました", Snackbar.LENGTH_LONG)
                 .show()
@@ -75,7 +71,10 @@ class MainActivity : AppCompatActivity() {
         // as you specify a parent activity in AndroidManifest.xml.
         return when (item.itemId) {
             R.id.action_reload -> {
-                MorningAlarmManager.get()
+                MorningAlarmManager.get {
+                    Snackbar.make(binding.addButton, "データの取得に成功しました！", Snackbar.LENGTH_LONG)
+                        .show()
+                }
                 AlarmsAdapter.notifyDataSetChanged()
 
                 true
