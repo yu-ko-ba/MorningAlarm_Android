@@ -14,6 +14,7 @@ import android.view.MenuItem
 import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
 import com.example.morningalarm.android.databinding.ActivityMainBinding
+import com.google.android.material.snackbar.Snackbar
 
 class MainActivity : AppCompatActivity() {
 
@@ -36,6 +37,15 @@ class MainActivity : AppCompatActivity() {
         }
         sharedPreferences.getString(getString(R.string.port_number_key), "5000")?.let {
             MorningAlarmManager.portNumber = it
+        }
+
+        MorningAlarmManager.setOnSucceeded {
+            Snackbar.make(binding.addButton, "データの取得に成功しました！", Snackbar.LENGTH_LONG)
+                .show()
+        }
+        MorningAlarmManager.setOnFailed {
+            Snackbar.make(binding.addButton, "データの取得に失敗しました", Snackbar.LENGTH_LONG)
+                .show()
         }
 
         val navController = findNavController(R.id.nav_host_fragment_content_main)

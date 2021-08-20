@@ -12,6 +12,10 @@ object MorningAlarmManager {
     var serverAddress = "192.168.128.207"
     var portNumber = "5000"
 
+    private var onSucceeded: () -> Unit = {}
+    private var onFailed: () -> Unit = {}
+
+    // get()の中でonSucceededとonFailedを参照してるからそれらのプロパティの宣言より先に宣言しようとするとぬるぽで落ちる
     private var data = get().getJSONObject("data")
 
 
@@ -30,13 +34,24 @@ object MorningAlarmManager {
     }
 
 
+    fun setOnSucceeded(action: () -> Unit) {
+        onSucceeded = action
+    }
+
+
+    fun setOnFailed(action: () -> Unit) {
+        onFailed = action
+    }
+
+
     private fun getBaseUrl(): String {
         return "http://${serverAddress}:${portNumber}"
     }
 
 
     private fun getJsonString(url: URL): String {
-        return runBlocking(Dispatchers.IO) {
+        var succeeded = false
+        val json = runBlocking(Dispatchers.IO) {
             var json = ""
             for (count in 0..2) {
                 try {
@@ -49,6 +64,7 @@ object MorningAlarmManager {
                         s
                     }
                     println("JSONの取得に成功しました")
+                    succeeded = true
                     break
                 } catch (e: Exception) {
                     println("JSONの取得に失敗しました")
@@ -56,6 +72,15 @@ object MorningAlarmManager {
             }
             json
         }
+
+        if (succeeded) {
+            onSucceeded()
+        } else {
+            onFailed()
+        }
+        onSucceeded()
+
+        return json
     }
 
 
