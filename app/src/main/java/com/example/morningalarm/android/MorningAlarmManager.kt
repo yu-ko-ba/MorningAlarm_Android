@@ -42,11 +42,11 @@ object MorningAlarmManager {
                 try {
                     val br = BufferedReader(InputStreamReader(url.openStream()))
                     json = runBlocking(Dispatchers.Default) {
-                        var json = ""
+                        var s = ""
                         for (line in br.lines()) {
-                            json += line
+                            s += line
                         }
-                        json
+                        s
                     }
                     println("JSONの取得に成功しました")
                     break
@@ -87,7 +87,7 @@ object MorningAlarmManager {
 
 
     fun delete(id: String): JSONObject {
-        println("ID: ${id}")
+        println("ID: $id")
         println("deleted")
         return parseJSON(getJsonString(URL("${getBaseUrl()}/delete/${id}")))
     }
