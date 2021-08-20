@@ -1,6 +1,8 @@
 package com.example.morningalarm.android
 
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.json.JSONObject
 import java.io.BufferedReader
@@ -12,7 +14,7 @@ object MorningAlarmManager {
     var serverAddress = "192.168.128.207"
     var portNumber = "5000"
 
-    private var data = JSONObject("{\"data\":{}}")
+    private var data = JSONObject("{}")
 
     private var onFailed: () -> Unit = {}
 
@@ -45,7 +47,7 @@ object MorningAlarmManager {
     private fun getJsonString(url: URL): String {
         return runBlocking(Dispatchers.IO) {
             var json = ""
-            for (count in 0..2) {
+            for (count in 0..100) {
                 try {
                     val br = BufferedReader(InputStreamReader(url.openStream()))
                     json = runBlocking(Dispatchers.Default) {
@@ -81,27 +83,43 @@ object MorningAlarmManager {
     }
 
 
-    fun get(onSucceedListener: () -> Unit = {}): JSONObject {
+    fun get(onSucceedListener: () -> Unit = {}) {
         println("get")
-        return parseJSON(getJsonString(URL("${getBaseUrl()}/list")), onSucceedListener)?.getJSONObject("data") ?: data
+        CoroutineScope(Dispatchers.Default).launch {
+            parseJSON(getJsonString(URL("${getBaseUrl()}/list")), onSucceedListener)?.getJSONObject("data")?.let {
+                data = it
+            }
+        }
     }
 
 
-    fun add(hour: Int, minute: Int, onSucceedListener: () -> Unit = {}): JSONObject {
+    fun add(hour: Int, minute: Int, onSucceedListener: () -> Unit = {}) {
         println("add")
-        return parseJSON(getJsonString(URL("${getBaseUrl()}/add/${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}")), onSucceedListener)?.getJSONObject("data") ?: data
+        CoroutineScope(Dispatchers.Default).launch {
+            parseJSON(getJsonString(URL("${getBaseUrl()}/add/${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}")), onSucceedListener)?.getJSONObject("data")?.let {
+                data = it
+            }
+        }
     }
 
 
-    fun delete(id: String, onSucceedListener: () -> Unit = {}): JSONObject {
+    fun delete(id: String, onSucceedListener: () -> Unit = {}) {
         println("ID: $id")
         println("deleted")
-        return parseJSON(getJsonString(URL("${getBaseUrl()}/delete/${id}")), onSucceedListener)?.getJSONObject("data") ?: data
+        CoroutineScope(Dispatchers.Default).launch {
+            parseJSON(getJsonString(URL("${getBaseUrl()}/delete/${id}")), onSucceedListener)?.getJSONObject("data")?.let {
+                data = it
+            }
+        }
     }
 
 
-    fun change(id: String, hour: Int, minute: Int, onSucceedListener: () -> Unit = {}): JSONObject {
+    fun change(id: String, hour: Int, minute: Int, onSucceedListener: () -> Unit = {}) {
         println("change")
-        return parseJSON(getJsonString(URL("${getBaseUrl()}/change/${id}/${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}")), onSucceedListener)?.getJSONObject("data") ?: data
+        CoroutineScope(Dispatchers.Default).launch {
+            parseJSON(getJsonString(URL("${getBaseUrl()}/change/${id}/${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}")), onSucceedListener)?.getJSONObject("data")?.let {
+                data = it
+            }
+        }
     }
 }

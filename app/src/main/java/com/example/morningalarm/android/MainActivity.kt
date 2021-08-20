@@ -15,6 +15,9 @@ import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
 import com.example.morningalarm.android.databinding.ActivityMainBinding
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
 
@@ -23,6 +26,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var sharedPreferences: SharedPreferences
 
+    @SuppressLint("NotifyDataSetChanged")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -44,6 +48,12 @@ class MainActivity : AppCompatActivity() {
                 .show()
         }
 
+        MorningAlarmManager.get {
+            CoroutineScope(Dispatchers.Main).launch {
+                AlarmsAdapter.notifyDataSetChanged()
+            }
+        }
+
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         appBarConfiguration = AppBarConfiguration(navController.graph)
         setupActionBarWithNavController(navController, appBarConfiguration)
@@ -51,8 +61,11 @@ class MainActivity : AppCompatActivity() {
         binding.addButton.setOnClickListener {
             val dialog = TimePickerDialogFragment(this, 7, 0, true)
             dialog.setOnTimeSetListener { hourOfDay, minute ->
-                MorningAlarmManager.add(hourOfDay, minute)
-                AlarmsAdapter.notifyItemInserted(MorningAlarmManager.getKeys().size - 1)
+                MorningAlarmManager.add(hourOfDay, minute) {
+                    CoroutineScope(Dispatchers.Main).launch {
+                        AlarmsAdapter.notifyItemInserted(MorningAlarmManager.getKeys().size - 1)
+                    }
+                }
             }
             dialog.show(supportFragmentManager)
         }
@@ -72,10 +85,12 @@ class MainActivity : AppCompatActivity() {
         return when (item.itemId) {
             R.id.action_reload -> {
                 MorningAlarmManager.get {
-                    Snackbar.make(binding.addButton, "データの取得に成功しました！", Snackbar.LENGTH_LONG)
-                        .show()
+                    CoroutineScope(Dispatchers.Main).launch {
+                        AlarmsAdapter.notifyDataSetChanged()
+                        Snackbar.make(binding.addButton, "データの取得に成功しました！", Snackbar.LENGTH_LONG)
+                            .show()
+                    }
                 }
-                AlarmsAdapter.notifyDataSetChanged()
 
                 true
             }
@@ -105,8 +120,11 @@ class MainActivity : AppCompatActivity() {
                                 .putString(getString(R.string.port_number_key), portNumber).apply()
                         }
 
-                        MorningAlarmManager.get()
-                        AlarmsAdapter.notifyDataSetChanged()
+                        MorningAlarmManager.get {
+                            CoroutineScope(Dispatchers.Main).launch {
+                                AlarmsAdapter.notifyDataSetChanged()
+                            }
+                        }
                     }
                     .setNegativeButton(getString(R.string.cancel)) { dialog, _ ->
                         dialog.cancel()

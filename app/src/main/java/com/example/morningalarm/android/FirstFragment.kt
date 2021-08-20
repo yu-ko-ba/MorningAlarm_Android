@@ -14,6 +14,9 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.morningalarm.android.databinding.FragmentFirstBinding
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.json.JSONObject
 
 /**
@@ -84,8 +87,11 @@ class FirstFragment : Fragment() {
                         // 時間を変更する
                         val dialog = TimePickerDialogFragment(requireContext(), 7, 0, true)
                         dialog.setOnTimeSetListener { hourOfDay, minute ->
-                            MorningAlarmManager.change(MorningAlarmManager.getKeys()[position], hourOfDay, minute)
-                            adapter.notifyItemChanged(position)
+                            MorningAlarmManager.change(MorningAlarmManager.getKeys()[position], hourOfDay, minute) {
+                                CoroutineScope(Dispatchers.Main).launch {
+                                    adapter.notifyItemChanged(position)
+                                }
+                            }
                         }
                         dialog.show(childFragmentManager)
 
@@ -93,8 +99,11 @@ class FirstFragment : Fragment() {
                     }
                     ItemTouchHelper.RIGHT -> {
                         // アラームを削除する
-                        MorningAlarmManager.delete(MorningAlarmManager.getKeys()[position])
-                        adapter.notifyItemRemoved(position)
+                        MorningAlarmManager.delete(MorningAlarmManager.getKeys()[position]) {
+                            CoroutineScope(Dispatchers.Main).launch {
+                                adapter.notifyItemRemoved(position)
+                            }
+                        }
                     }
                 }
 
