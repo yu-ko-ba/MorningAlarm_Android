@@ -15,8 +15,7 @@ object MorningAlarmManager {
     private var onSucceeded: () -> Unit = {}
     private var onFailed: () -> Unit = {}
 
-    // get()の中でonSucceededとonFailedを参照してるからそれらのプロパティの宣言より先に宣言しようとするとぬるぽで落ちる
-    private var data = get().getJSONObject("data")
+    private var data = JSONObject("{\"data\":{}}")
 
 
     fun getData(): JSONObject {
@@ -84,13 +83,11 @@ object MorningAlarmManager {
     }
 
 
-    private fun parseJSON(json: String): JSONObject {
-        var jsonObject = JSONObject("{\"data\":{}}")
+    private fun parseJSON(json: String): JSONObject? {
+        var jsonObject: JSONObject? = null
         try {
             jsonObject = JSONObject(json)
             println("JSONのパースに成功しました")
-
-            data = jsonObject.getJSONObject("data")
         } catch (e: Exception) {
             println("JSONのパースに失敗しました")
         }
@@ -101,25 +98,25 @@ object MorningAlarmManager {
 
     fun get(): JSONObject {
         println("get")
-        return parseJSON(getJsonString(URL("${getBaseUrl()}/list")))
+        return parseJSON(getJsonString(URL("${getBaseUrl()}/list")))?.getJSONObject("data") ?: data
     }
 
 
     fun add(hour: Int, minute: Int): JSONObject {
         println("add")
-        return parseJSON(getJsonString(URL("${getBaseUrl()}/add/${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}")))
+        return parseJSON(getJsonString(URL("${getBaseUrl()}/add/${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}")))?.getJSONObject("data") ?: data
     }
 
 
     fun delete(id: String): JSONObject {
         println("ID: $id")
         println("deleted")
-        return parseJSON(getJsonString(URL("${getBaseUrl()}/delete/${id}")))
+        return parseJSON(getJsonString(URL("${getBaseUrl()}/delete/${id}")))?.getJSONObject("data") ?: data
     }
 
 
     fun change(id: String, hour: Int, minute: Int): JSONObject {
         println("change")
-        return parseJSON(getJsonString(URL("${getBaseUrl()}/change/${id}/${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}")))
+        return parseJSON(getJsonString(URL("${getBaseUrl()}/change/${id}/${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}")))?.getJSONObject("data") ?: data
     }
 }
