@@ -66,7 +66,7 @@ class FirstFragment : Fragment() {
             }
             CoroutineScope(Dispatchers.Main).launch {
                 binding.swipeRefreshLayout.isRefreshing = false
-                Snackbar.make(binding.root, "データの取得に失敗しました", Snackbar.LENGTH_LONG)
+                Snackbar.make(binding.root, "同期に失敗しました。", Snackbar.LENGTH_LONG)
                     .show()
             }
         }
@@ -152,7 +152,7 @@ class FirstFragment : Fragment() {
 
                         MorningAlarmManager.get {
                             CoroutineScope(Dispatchers.Main).launch {
-                                Snackbar.make(binding.root, "データの取得に成功しました", Snackbar.LENGTH_LONG)
+                                Snackbar.make(binding.root, "同期に成功しました！", Snackbar.LENGTH_LONG)
                                     .show()
                                 AlarmsAdapter.notifyDataSetChanged()
                             }
