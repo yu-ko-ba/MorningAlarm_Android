@@ -68,7 +68,7 @@ object MorningAlarmManager {
     }
 
 
-    private fun parseJSON(json: String, onSucceedListener: () -> Unit = {}, onFailedAdditionalListener: () -> Unit = {}): JSONObject? {
+    private fun parseJSON(json: String, onSucceedListener: () -> Unit, onFailedAdditionalListener: () -> Unit): JSONObject? {
         var jsonObject: JSONObject? = null
         try {
             jsonObject = JSONObject(json)
