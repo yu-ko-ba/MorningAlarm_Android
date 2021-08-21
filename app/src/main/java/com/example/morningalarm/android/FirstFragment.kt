@@ -203,11 +203,19 @@ class FirstFragment : Fragment() {
                     }
                     ItemTouchHelper.RIGHT -> {
                         // アラームを削除する
-                        MorningAlarmManager.delete(MorningAlarmManager.getKeys()[position]) {
-                            CoroutineScope(Dispatchers.Main).launch {
-                                adapter.notifyItemRemoved(position)
+                        MorningAlarmManager.delete(
+                            MorningAlarmManager.getKeys()[position],
+                            {
+                                CoroutineScope(Dispatchers.Main).launch {
+                                    adapter.notifyItemRemoved(position)
+                                }
+                            },
+                            {
+                                CoroutineScope(Dispatchers.Main).launch {
+                                    adapter.notifyDataSetChanged()
+                                }
                             }
-                        }
+                        )
                     }
                 }
 

@@ -91,8 +91,8 @@ object MorningAlarmManager {
             onSucceedListener()
         } catch (e: Exception) {
             println("JSONのパースに失敗しました")
-            onFailedAdditionalListener()
             onFailedListener()
+            onFailedAdditionalListener()
         }
 
         return jsonObject
