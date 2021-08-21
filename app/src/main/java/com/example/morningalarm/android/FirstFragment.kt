@@ -193,15 +193,30 @@ class FirstFragment : Fragment() {
                         // 時間を変更する
                         val dialog = TimePickerDialogFragment(requireContext(), 7, 0, true)
                         dialog.setOnTimeSetListener { hourOfDay, minute ->
-                            MorningAlarmManager.change(MorningAlarmManager.getKeys()[position], hourOfDay, minute) {
-                                CoroutineScope(Dispatchers.Main).launch {
-                                    adapter.notifyItemChanged(position)
+                            MorningAlarmManager.change(
+                                MorningAlarmManager.getKeys()[position],
+                                hourOfDay,
+                                minute,
+                                {
+                                    runBlocking {
+                                        adapter.notifyDataSetChanged()
+                                        delay(200)
+                                    }
+                                    CoroutineScope(Dispatchers.Main).launch {
+                                        adapter.notifyItemChanged(position)
+                                    }
+                                },
+                                {
+                                    CoroutineScope(Dispatchers.Main).launch {
+                                        adapter.notifyDataSetChanged()
+                                    }
                                 }
-                            }
+                            )
+                        }
+                        dialog.setOnCancelListener {
+                            adapter.notifyDataSetChanged()
                         }
                         dialog.show(childFragmentManager)
-
-                        adapter.notifyDataSetChanged()
                     }
                     ItemTouchHelper.RIGHT -> {
                         // アラームを削除する
