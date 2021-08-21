@@ -43,7 +43,7 @@ class MainActivity : AppCompatActivity() {
             MorningAlarmManager.portNumber = it
         }
 
-        MorningAlarmManager.setOnFailed {
+        MorningAlarmManager.setOnFailedListener {
             Snackbar.make(binding.addButton, "データの取得に失敗しました", Snackbar.LENGTH_LONG)
                 .show()
         }

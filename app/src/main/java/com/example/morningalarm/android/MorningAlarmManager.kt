@@ -16,7 +16,7 @@ object MorningAlarmManager {
 
     private var data = JSONObject("{}")
 
-    private var onFailed: () -> Unit = {}
+    private var onFailedListener: () -> Unit = {}
 
 
     fun getData(): JSONObject {
@@ -34,8 +34,8 @@ object MorningAlarmManager {
     }
 
 
-    fun setOnFailed(action: () -> Unit) {
-        onFailed = action
+    fun setOnFailedListener(action: () -> Unit) {
+        onFailedListener = action
     }
 
 
@@ -76,7 +76,7 @@ object MorningAlarmManager {
             onSucceedListener()
         } catch (e: Exception) {
             println("JSONのパースに失敗しました")
-            onFailed()
+            onFailedListener()
         }
 
         return jsonObject
