@@ -80,10 +80,7 @@ class FirstFragment : Fragment() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
-            R.id.action_refresh -> {
-                binding.swipeRefreshLayout.isRefreshing = true
-                refreshItems()
-
+            R.id.action_settings -> {
                 true
             }
             else -> super.onOptionsItemSelected(item)
