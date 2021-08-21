@@ -45,11 +45,17 @@ class FirstFragment : Fragment() {
 
         setHasOptionsMenu(true)
 
+        binding.alarmsRecyclerView.layoutManager = LinearLayoutManager(this.requireContext())
+        val keys = mutableListOf<String>()
+        for (key in MorningAlarmManager.getKeys()) {
+            keys.add(key)
+        }
+        getSwipeActionHelper(AlarmsAdapter).attachToRecyclerView(binding.alarmsRecyclerView)
+        binding.alarmsRecyclerView.adapter = AlarmsAdapter
+
         binding.swipeRefreshLayout.setOnRefreshListener {
             refreshItems()
         }
-
-        setAdapter()
     }
 
 
@@ -61,20 +67,6 @@ class FirstFragment : Fragment() {
                 AlarmsAdapter.notifyDataSetChanged()
             }
         }
-    }
-
-
-    fun setAdapter(alarmList: JSONObject=MorningAlarmManager.getData()) {
-        binding.alarmsRecyclerView.layoutManager = LinearLayoutManager(this.requireContext())
-        val keys = mutableListOf<String>()
-        for (key in alarmList.keys()) {
-            keys.add(key)
-        }
-        val adapter = AlarmsAdapter
-
-        getSwipeActionHelper(adapter).attachToRecyclerView(binding.alarmsRecyclerView)
-
-        binding.alarmsRecyclerView.adapter = adapter
     }
 
 
