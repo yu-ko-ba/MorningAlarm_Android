@@ -11,6 +11,5 @@ class MorningAlarmManagerTest : TestCase() {
     public override fun tearDown() {}
 
     fun testGetAlarmList() {
-        MorningAlarmManager.get()
     }
 }

@@ -16,6 +16,7 @@ object MorningAlarmManager {
 
     private var data = JSONObject("{}")
 
+    private var onOperationStartListener: () -> Unit = {}
     private var onSucceedListener: () -> Unit = {}
     private var onFailedListener: () -> Unit = {}
 
@@ -32,6 +33,11 @@ object MorningAlarmManager {
         }
 
         return keys.toList()
+    }
+
+
+    fun setOnOperationStartListener(listener: () -> Unit) {
+        onOperationStartListener = listener
     }
 
 
@@ -75,6 +81,8 @@ object MorningAlarmManager {
 
 
     private fun parseJSON(json: String, onSucceedAdditionalListener: () -> Unit, onFailedAdditionalListener: () -> Unit): JSONObject? {
+        onOperationStartListener()
+
         var jsonObject: JSONObject? = null
         try {
             jsonObject = JSONObject(json)

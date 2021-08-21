@@ -50,16 +50,25 @@ class FirstFragment : Fragment() {
             MorningAlarmManager.portNumber = it
         }
 
+        MorningAlarmManager.setOnOperationStartListener {
+            CoroutineScope(Dispatchers.Main).launch {
+                binding.swipeRefreshLayout.isRefreshing = true
+            }
+        }
         MorningAlarmManager.setOnSucceedListener {
-            binding.swipeRefreshLayout.isRefreshing = false
+            CoroutineScope(Dispatchers.Main).launch {
+                binding.swipeRefreshLayout.isRefreshing = false
+            }
         }
         MorningAlarmManager.setOnFailedListener {
             runBlocking {
                 delay(5000)
             }
-            binding.swipeRefreshLayout.isRefreshing = false
-            Snackbar.make(binding.root, "データの取得に失敗しました", Snackbar.LENGTH_LONG)
-                .show()
+            CoroutineScope(Dispatchers.Main).launch {
+                binding.swipeRefreshLayout.isRefreshing = false
+                Snackbar.make(binding.root, "データの取得に失敗しました", Snackbar.LENGTH_LONG)
+                    .show()
+            }
         }
 
         MorningAlarmManager.get {
