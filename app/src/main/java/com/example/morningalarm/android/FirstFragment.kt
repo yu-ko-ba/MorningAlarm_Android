@@ -214,7 +214,9 @@ class FirstFragment : Fragment() {
                             )
                         }
                         dialog.setOnCancelListener {
-                            adapter.notifyDataSetChanged()
+                            CoroutineScope(Dispatchers.Main).launch {
+                                adapter.notifyItemChanged(position)
+                            }
                         }
                         dialog.show(childFragmentManager)
                     }
