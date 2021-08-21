@@ -94,31 +94,31 @@ object MorningAlarmManager {
     }
 
 
-    fun add(hour: Int, minute: Int, onSucceedListener: () -> Unit = {}) {
+    fun add(hour: Int, minute: Int, onSucceedListener: () -> Unit = {}, onFailedAdditionalListener: () -> Unit = {}) {
         println("add")
         CoroutineScope(Dispatchers.Default).launch {
-            parseJSON(getJsonString(URL("${getBaseUrl()}/add/${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}")), onSucceedListener)?.getJSONObject("data")?.let {
+            parseJSON(getJsonString(URL("${getBaseUrl()}/add/${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}")), onSucceedListener, onFailedAdditionalListener)?.getJSONObject("data")?.let {
                 data = it
             }
         }
     }
 
 
-    fun delete(id: String, onSucceedListener: () -> Unit = {}) {
+    fun delete(id: String, onSucceedListener: () -> Unit = {}, onFailedAdditionalListener: () -> Unit = {}) {
         println("ID: $id")
         println("deleted")
         CoroutineScope(Dispatchers.Default).launch {
-            parseJSON(getJsonString(URL("${getBaseUrl()}/delete/${id}")), onSucceedListener)?.getJSONObject("data")?.let {
+            parseJSON(getJsonString(URL("${getBaseUrl()}/delete/${id}")), onSucceedListener, onFailedAdditionalListener)?.getJSONObject("data")?.let {
                 data = it
             }
         }
     }
 
 
-    fun change(id: String, hour: Int, minute: Int, onSucceedListener: () -> Unit = {}) {
+    fun change(id: String, hour: Int, minute: Int, onSucceedListener: () -> Unit = {}, onFailedAdditionalListener: () -> Unit = {}) {
         println("change")
         CoroutineScope(Dispatchers.Default).launch {
-            parseJSON(getJsonString(URL("${getBaseUrl()}/change/${id}/${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}")), onSucceedListener)?.getJSONObject("data")?.let {
+            parseJSON(getJsonString(URL("${getBaseUrl()}/change/${id}/${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}")), onSucceedListener, onFailedAdditionalListener)?.getJSONObject("data")?.let {
                 data = it
             }
         }
