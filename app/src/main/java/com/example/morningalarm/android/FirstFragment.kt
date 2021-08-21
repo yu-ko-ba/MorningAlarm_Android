@@ -152,6 +152,8 @@ class FirstFragment : Fragment() {
 
                         MorningAlarmManager.get {
                             CoroutineScope(Dispatchers.Main).launch {
+                                Snackbar.make(binding.root, "データの取得に成功しました", Snackbar.LENGTH_LONG)
+                                    .show()
                                 AlarmsAdapter.notifyDataSetChanged()
                             }
                         }
