@@ -208,7 +208,7 @@ class FirstFragment : Fragment() {
                                 },
                                 {
                                     CoroutineScope(Dispatchers.Main).launch {
-                                        adapter.notifyDataSetChanged()
+                                        adapter.notifyItemChanged(position)
                                     }
                                 }
                             )
