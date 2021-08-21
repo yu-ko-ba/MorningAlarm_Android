@@ -68,7 +68,7 @@ object MorningAlarmManager {
     }
 
 
-    private fun parseJSON(json: String, onSucceedListener: () -> Unit = {}): JSONObject? {
+    private fun parseJSON(json: String, onSucceedListener: () -> Unit = {}, onFailedAdditionalListener: () -> Unit = {}): JSONObject? {
         var jsonObject: JSONObject? = null
         try {
             jsonObject = JSONObject(json)
@@ -76,6 +76,7 @@ object MorningAlarmManager {
             onSucceedListener()
         } catch (e: Exception) {
             println("JSONのパースに失敗しました")
+            onFailedAdditionalListener()
             onFailedListener()
         }
 
@@ -83,10 +84,10 @@ object MorningAlarmManager {
     }
 
 
-    fun get(onSucceedListener: () -> Unit = {}) {
+    fun get(onSucceedListener: () -> Unit = {}, onFailedAdditionalListener: () -> Unit = {}) {
         println("get")
         CoroutineScope(Dispatchers.Default).launch {
-            parseJSON(getJsonString(URL("${getBaseUrl()}/list")), onSucceedListener)?.getJSONObject("data")?.let {
+            parseJSON(getJsonString(URL("${getBaseUrl()}/list")), onSucceedListener, onFailedAdditionalListener)?.getJSONObject("data")?.let {
                 data = it
             }
         }

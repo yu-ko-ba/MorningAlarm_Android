@@ -61,12 +61,17 @@ class FirstFragment : Fragment() {
 
     @SuppressLint("NotifyDataSetChanged")
     private fun refreshItems() {
-        MorningAlarmManager.get {
-            binding.swipeRefreshLayout.isRefreshing = false
-            CoroutineScope(Dispatchers.Main).launch {
-                AlarmsAdapter.notifyDataSetChanged()
+        MorningAlarmManager.get(
+            {
+                binding.swipeRefreshLayout.isRefreshing = false
+                CoroutineScope(Dispatchers.Main).launch {
+                    AlarmsAdapter.notifyDataSetChanged()
+                }
+            },
+            {
+                binding.swipeRefreshLayout.isRefreshing = false
             }
-        }
+        )
     }
 
 
