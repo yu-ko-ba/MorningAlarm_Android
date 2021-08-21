@@ -17,9 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.morningalarm.android.databinding.FragmentFirstBinding
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.
@@ -41,10 +39,10 @@ class FirstFragment : Fragment() {
 
         binding = FragmentFirstBinding.inflate(layoutInflater)
 
+        binding.swipeRefreshLayout.isRefreshing = true
+
         sharedPreferences = this.requireContext().getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE)
 
-        binding.swipeRefreshLayout.isRefreshing = true
-        binding.swipeRefreshLayout.isRefreshing = false
         sharedPreferences.getString(getString(R.string.server_address_key), "192.168.128.207")?.let {
             MorningAlarmManager.serverAddress = it
         }
@@ -52,7 +50,14 @@ class FirstFragment : Fragment() {
             MorningAlarmManager.portNumber = it
         }
 
+        MorningAlarmManager.setOnSucceedListener {
+            binding.swipeRefreshLayout.isRefreshing = false
+        }
         MorningAlarmManager.setOnFailedListener {
+            runBlocking {
+                delay(5000)
+            }
+            binding.swipeRefreshLayout.isRefreshing = false
             Snackbar.make(binding.root, "データの取得に失敗しました", Snackbar.LENGTH_LONG)
                 .show()
         }
@@ -97,17 +102,11 @@ class FirstFragment : Fragment() {
 
     @SuppressLint("NotifyDataSetChanged")
     private fun refreshItems() {
-        MorningAlarmManager.get(
-            {
-                binding.swipeRefreshLayout.isRefreshing = false
-                CoroutineScope(Dispatchers.Main).launch {
-                    AlarmsAdapter.notifyDataSetChanged()
-                }
-            },
-            {
-                binding.swipeRefreshLayout.isRefreshing = false
+        MorningAlarmManager.get {
+            CoroutineScope(Dispatchers.Main).launch {
+                AlarmsAdapter.notifyDataSetChanged()
             }
-        )
+        }
     }
 
 
@@ -142,18 +141,10 @@ class FirstFragment : Fragment() {
                                 .putString(getString(R.string.port_number_key), portNumber).apply()
                         }
 
-                        MorningAlarmManager.get(
-                            {
-                                binding.swipeRefreshLayout.isRefreshing = false
-                                CoroutineScope(Dispatchers.Main).launch {
-                                    AlarmsAdapter.notifyDataSetChanged()
-                                }
-                            },
-                            {
-                                binding.swipeRefreshLayout.isRefreshing = false
-                            }
-                        )
                         MorningAlarmManager.get {
+                            CoroutineScope(Dispatchers.Main).launch {
+                                AlarmsAdapter.notifyDataSetChanged()
+                            }
                         }
                     }
                     .setNegativeButton(getString(R.string.cancel)) { dialog, _ ->
