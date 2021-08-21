@@ -1,11 +1,15 @@
 package com.example.morningalarm.android
 
 import android.annotation.SuppressLint
+import android.content.Context
+import android.content.SharedPreferences
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.*
+import android.widget.EditText
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -15,7 +19,6 @@ import com.example.morningalarm.android.databinding.FragmentFirstBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.json.JSONObject
 
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.
@@ -27,6 +30,15 @@ class FirstFragment : Fragment() {
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
+
+    private lateinit var sharedPreferences: SharedPreferences
+
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        sharedPreferences = this.requireContext().getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE)
+    }
 
 
     override fun onCreateView(
@@ -75,9 +87,55 @@ class FirstFragment : Fragment() {
     }
 
 
+    @SuppressLint("CutPasteId", "NotifyDataSetChanged")
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_settings -> {
+                val view = this.layoutInflater.inflate(R.layout.dialog_settings, null)
+                view.findViewById<EditText>(R.id.serverAddress).hint = MorningAlarmManager.serverAddress
+                view.findViewById<EditText>(R.id.portNumber).hint = MorningAlarmManager.portNumber
+
+                AlertDialog.Builder(this.requireContext())
+                    .setTitle(getString(R.string.setting_dialog_title))
+                    .setView(view)
+                    .setPositiveButton(getString(R.string.ok)) { _, _ ->
+                        binding.swipeRefreshLayout.isRefreshing = true
+
+                        val serverAddress =
+                            view.findViewById<EditText>(R.id.serverAddress).text.toString()
+                        val portNumber =
+                            view.findViewById<EditText>(R.id.portNumber).text.toString()
+
+                        if (serverAddress != "") {
+                            MorningAlarmManager.serverAddress = serverAddress
+                            sharedPreferences.edit()
+                                .putString(getString(R.string.server_address_key), serverAddress)
+                                .apply()
+                        }
+                        if (portNumber != "") {
+                            MorningAlarmManager.portNumber = portNumber
+                            sharedPreferences.edit()
+                                .putString(getString(R.string.port_number_key), portNumber).apply()
+                        }
+
+                        MorningAlarmManager.get(
+                            {
+                                binding.swipeRefreshLayout.isRefreshing = false
+                                CoroutineScope(Dispatchers.Main).launch {
+                                    AlarmsAdapter.notifyDataSetChanged()
+                                }
+                            },
+                            {
+                                binding.swipeRefreshLayout.isRefreshing = false
+                            }
+                        )
+                        MorningAlarmManager.get {
+                        }
+                    }
+                    .setNegativeButton(getString(R.string.cancel)) { dialog, _ ->
+                        dialog.cancel()
+                    }
+                    .show()
                 true
             }
             else -> super.onOptionsItemSelected(item)

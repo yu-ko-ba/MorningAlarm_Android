@@ -10,9 +10,6 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import android.view.Menu
-import android.view.MenuItem
-import android.widget.EditText
-import androidx.appcompat.app.AlertDialog
 import com.example.morningalarm.android.databinding.ActivityMainBinding
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.CoroutineScope
@@ -26,6 +23,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var sharedPreferences: SharedPreferences
 
+
     @SuppressLint("NotifyDataSetChanged")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,7 +33,7 @@ class MainActivity : AppCompatActivity() {
 
         setSupportActionBar(binding.toolbar)
 
-        sharedPreferences = this.getPreferences(Context.MODE_PRIVATE)
+        sharedPreferences = this.getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE)
         sharedPreferences.getString(getString(R.string.server_address_key), "192.168.128.207")?.let {
             MorningAlarmManager.serverAddress = it
         }
@@ -71,59 +69,13 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.menu_main, menu)
         return true
     }
 
-    @SuppressLint("CutPasteId", "NotifyDataSetChanged")
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        return when (item.itemId) {
-            R.id.action_settings -> {
-                val view = this.layoutInflater.inflate(R.layout.dialog_settings, null)
-                view.findViewById<EditText>(R.id.serverAddress).hint = MorningAlarmManager.serverAddress
-                view.findViewById<EditText>(R.id.portNumber).hint = MorningAlarmManager.portNumber
-
-                AlertDialog.Builder(this)
-                    .setTitle(getString(R.string.setting_dialog_title))
-                    .setView(view)
-                    .setPositiveButton(getString(R.string.ok)) { _, _ ->
-                        val serverAddress =
-                            view.findViewById<EditText>(R.id.serverAddress).text.toString()
-                        val portNumber =
-                            view.findViewById<EditText>(R.id.portNumber).text.toString()
-
-                        if (serverAddress != "") {
-                            MorningAlarmManager.serverAddress = serverAddress
-                            sharedPreferences.edit()
-                                .putString(getString(R.string.server_address_key), serverAddress)
-                                .apply()
-                        }
-                        if (portNumber != "") {
-                            MorningAlarmManager.portNumber = portNumber
-                            sharedPreferences.edit()
-                                .putString(getString(R.string.port_number_key), portNumber).apply()
-                        }
-
-                        MorningAlarmManager.get {
-                            CoroutineScope(Dispatchers.Main).launch {
-                                AlarmsAdapter.notifyDataSetChanged()
-                            }
-                        }
-                    }
-                    .setNegativeButton(getString(R.string.cancel)) { dialog, _ ->
-                        dialog.cancel()
-                    }
-                    .show()
-                true
-            }
-            else -> super.onOptionsItemSelected(item)
-        }
-    }
 
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.nav_host_fragment_content_main)
