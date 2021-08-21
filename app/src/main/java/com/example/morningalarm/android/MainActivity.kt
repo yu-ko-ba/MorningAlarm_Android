@@ -34,23 +34,6 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(binding.toolbar)
 
         sharedPreferences = this.getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE)
-        sharedPreferences.getString(getString(R.string.server_address_key), "192.168.128.207")?.let {
-            MorningAlarmManager.serverAddress = it
-        }
-        sharedPreferences.getString(getString(R.string.port_number_key), "5000")?.let {
-            MorningAlarmManager.portNumber = it
-        }
-
-        MorningAlarmManager.setOnFailedListener {
-            Snackbar.make(binding.addButton, "データの取得に失敗しました", Snackbar.LENGTH_LONG)
-                .show()
-        }
-
-        MorningAlarmManager.get {
-            CoroutineScope(Dispatchers.Main).launch {
-                AlarmsAdapter.notifyDataSetChanged()
-            }
-        }
 
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         appBarConfiguration = AppBarConfiguration(navController.graph)

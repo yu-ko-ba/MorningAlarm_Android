@@ -16,6 +16,7 @@ object MorningAlarmManager {
 
     private var data = JSONObject("{}")
 
+    private var onSucceedListener: () -> Unit = {}
     private var onFailedListener: () -> Unit = {}
 
 
@@ -34,8 +35,13 @@ object MorningAlarmManager {
     }
 
 
-    fun setOnFailedListener(action: () -> Unit) {
-        onFailedListener = action
+    fun setOnSucceedListener(listener: () -> Unit) {
+        onSucceedListener = listener
+    }
+
+
+    fun setOnFailedListener(listener: () -> Unit) {
+        onFailedListener = listener
     }
 
 
@@ -68,11 +74,12 @@ object MorningAlarmManager {
     }
 
 
-    private fun parseJSON(json: String, onSucceedListener: () -> Unit, onFailedAdditionalListener: () -> Unit): JSONObject? {
+    private fun parseJSON(json: String, onSucceedAdditionalListener: () -> Unit, onFailedAdditionalListener: () -> Unit): JSONObject? {
         var jsonObject: JSONObject? = null
         try {
             jsonObject = JSONObject(json)
             println("JSONのパースに成功しました")
+            onSucceedAdditionalListener()
             onSucceedListener()
         } catch (e: Exception) {
             println("JSONのパースに失敗しました")
@@ -84,63 +91,63 @@ object MorningAlarmManager {
     }
 
 
-    fun get(onSucceedListener: () -> Unit = {}, onFailedAdditionalListener: () -> Unit = {}) {
+    fun get(onSucceedAdditionalListener: () -> Unit = {}, onFailedAdditionalListener: () -> Unit = {}) {
         println("get")
         CoroutineScope(Dispatchers.Default).launch {
-            parseJSON(getJsonString(URL("${getBaseUrl()}/list")), onSucceedListener, onFailedAdditionalListener)?.getJSONObject("data")?.let {
+            parseJSON(getJsonString(URL("${getBaseUrl()}/list")), onSucceedAdditionalListener, onFailedAdditionalListener)?.getJSONObject("data")?.let {
                 data = it
             }
         }
     }
 
 
-    fun get(onSucceedListener: () -> Unit = {}) {
-        get(onSucceedListener, {})
+    fun get(onSucceedAdditionalListener: () -> Unit = {}) {
+        get(onSucceedAdditionalListener, {})
     }
 
 
-    fun add(hour: Int, minute: Int, onSucceedListener: () -> Unit = {}, onFailedAdditionalListener: () -> Unit = {}) {
+    fun add(hour: Int, minute: Int, onSucceedAdditionalListener: () -> Unit = {}, onFailedAdditionalListener: () -> Unit = {}) {
         println("add")
         CoroutineScope(Dispatchers.Default).launch {
-            parseJSON(getJsonString(URL("${getBaseUrl()}/add/${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}")), onSucceedListener, onFailedAdditionalListener)?.getJSONObject("data")?.let {
+            parseJSON(getJsonString(URL("${getBaseUrl()}/add/${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}")), onSucceedAdditionalListener, onFailedAdditionalListener)?.getJSONObject("data")?.let {
                 data = it
             }
         }
     }
 
 
-    fun add(hour: Int, minute: Int, onSucceedListener: () -> Unit = {}) {
-        add(hour, minute, onSucceedListener, {})
+    fun add(hour: Int, minute: Int, onSucceedAdditionalListener: () -> Unit = {}) {
+        add(hour, minute, onSucceedAdditionalListener, {})
     }
 
 
-    fun delete(id: String, onSucceedListener: () -> Unit = {}, onFailedAdditionalListener: () -> Unit = {}) {
+    fun delete(id: String, onSucceedAdditionalListener: () -> Unit = {}, onFailedAdditionalListener: () -> Unit = {}) {
         println("ID: $id")
         println("deleted")
         CoroutineScope(Dispatchers.Default).launch {
-            parseJSON(getJsonString(URL("${getBaseUrl()}/delete/${id}")), onSucceedListener, onFailedAdditionalListener)?.getJSONObject("data")?.let {
+            parseJSON(getJsonString(URL("${getBaseUrl()}/delete/${id}")), onSucceedAdditionalListener, onFailedAdditionalListener)?.getJSONObject("data")?.let {
                 data = it
             }
         }
     }
 
 
-    fun delete(id: String, onSucceedListener: () -> Unit = {}) {
-        delete(id, onSucceedListener, {})
+    fun delete(id: String, onSucceedAdditionalListener: () -> Unit = {}) {
+        delete(id, onSucceedAdditionalListener, {})
     }
 
 
-    fun change(id: String, hour: Int, minute: Int, onSucceedListener: () -> Unit = {}, onFailedAdditionalListener: () -> Unit = {}) {
+    fun change(id: String, hour: Int, minute: Int, onSucceedAdditionalListener: () -> Unit = {}, onFailedAdditionalListener: () -> Unit = {}) {
         println("change")
         CoroutineScope(Dispatchers.Default).launch {
-            parseJSON(getJsonString(URL("${getBaseUrl()}/change/${id}/${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}")), onSucceedListener, onFailedAdditionalListener)?.getJSONObject("data")?.let {
+            parseJSON(getJsonString(URL("${getBaseUrl()}/change/${id}/${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}")), onSucceedAdditionalListener, onFailedAdditionalListener)?.getJSONObject("data")?.let {
                 data = it
             }
         }
     }
 
 
-    fun change(id: String, hour: Int, minute: Int, onSucceedListener: () -> Unit = {}) {
-        change(id, hour, minute, onSucceedListener, {})
+    fun change(id: String, hour: Int, minute: Int, onSucceedAdditionalListener: () -> Unit = {}) {
+        change(id, hour, minute, onSucceedAdditionalListener, {})
     }
 }

@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.morningalarm.android.databinding.FragmentFirstBinding
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -27,17 +28,40 @@ class FirstFragment : Fragment() {
 
     private var _binding: FragmentFirstBinding? = null
 
-    // This property is only valid between onCreateView and
+    // This property is only valid between onCreate and
     // onDestroyView.
-    private val binding get() = _binding!!
+    private lateinit var binding: FragmentFirstBinding
 
     private lateinit var sharedPreferences: SharedPreferences
 
 
+    @SuppressLint("NotifyDataSetChanged")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        binding = FragmentFirstBinding.inflate(layoutInflater)
+
         sharedPreferences = this.requireContext().getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE)
+
+        binding.swipeRefreshLayout.isRefreshing = true
+        binding.swipeRefreshLayout.isRefreshing = false
+        sharedPreferences.getString(getString(R.string.server_address_key), "192.168.128.207")?.let {
+            MorningAlarmManager.serverAddress = it
+        }
+        sharedPreferences.getString(getString(R.string.port_number_key), "5000")?.let {
+            MorningAlarmManager.portNumber = it
+        }
+
+        MorningAlarmManager.setOnFailedListener {
+            Snackbar.make(binding.root, "データの取得に失敗しました", Snackbar.LENGTH_LONG)
+                .show()
+        }
+
+        MorningAlarmManager.get {
+            CoroutineScope(Dispatchers.Main).launch {
+                AlarmsAdapter.notifyDataSetChanged()
+            }
+        }
     }
 
 
