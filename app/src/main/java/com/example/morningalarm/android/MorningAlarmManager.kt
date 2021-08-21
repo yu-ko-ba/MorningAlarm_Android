@@ -94,6 +94,11 @@ object MorningAlarmManager {
     }
 
 
+    fun get(onSucceedListener: () -> Unit = {}) {
+        get(onSucceedListener, {})
+    }
+
+
     fun add(hour: Int, minute: Int, onSucceedListener: () -> Unit = {}, onFailedAdditionalListener: () -> Unit = {}) {
         println("add")
         CoroutineScope(Dispatchers.Default).launch {
@@ -101,6 +106,11 @@ object MorningAlarmManager {
                 data = it
             }
         }
+    }
+
+
+    fun add(hour: Int, minute: Int, onSucceedListener: () -> Unit = {}) {
+        add(hour, minute, onSucceedListener, {})
     }
 
 
@@ -115,6 +125,11 @@ object MorningAlarmManager {
     }
 
 
+    fun delete(id: String, onSucceedListener: () -> Unit = {}) {
+        delete(id, onSucceedListener, {})
+    }
+
+
     fun change(id: String, hour: Int, minute: Int, onSucceedListener: () -> Unit = {}, onFailedAdditionalListener: () -> Unit = {}) {
         println("change")
         CoroutineScope(Dispatchers.Default).launch {
@@ -122,5 +137,10 @@ object MorningAlarmManager {
                 data = it
             }
         }
+    }
+
+
+    fun change(id: String, hour: Int, minute: Int, onSucceedListener: () -> Unit = {}) {
+        change(id, hour, minute, onSucceedListener, {})
     }
 }
