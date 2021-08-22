@@ -43,10 +43,10 @@ class FirstFragment : Fragment() {
 
         sharedPreferences = this.requireContext().getSharedPreferences(getString(R.string.preferences_name), Context.MODE_PRIVATE)
 
-        sharedPreferences.getString(getString(R.string.server_address_key), "192.168.128.207")?.let {
+        sharedPreferences.getString(getString(R.string.server_address_key), getString(R.string.default_server_address))?.let {
             MorningAlarmManager.serverAddress = it
         }
-        sharedPreferences.getString(getString(R.string.port_number_key), "5000")?.let {
+        sharedPreferences.getString(getString(R.string.port_number_key), getString(R.string.default_port_number))?.let {
             MorningAlarmManager.portNumber = it
         }
 
