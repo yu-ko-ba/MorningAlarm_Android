@@ -66,7 +66,7 @@ class FirstFragment : Fragment() {
             }
             CoroutineScope(Dispatchers.Main).launch {
                 binding.swipeRefreshLayout.isRefreshing = false
-                Snackbar.make(binding.root, "同期に失敗しました。", Snackbar.LENGTH_LONG)
+                Snackbar.make(binding.root, getString(R.string.sync_failed), Snackbar.LENGTH_LONG)
                     .show()
             }
         }
@@ -128,7 +128,7 @@ class FirstFragment : Fragment() {
                 view.findViewById<EditText>(R.id.portNumber).hint = MorningAlarmManager.portNumber
 
                 AlertDialog.Builder(this.requireContext())
-                    .setTitle(getString(R.string.setting_dialog_title))
+                    .setTitle(getString(R.string.settings))
                     .setView(view)
                     .setPositiveButton(getString(R.string.ok)) { _, _ ->
                         binding.swipeRefreshLayout.isRefreshing = true
@@ -152,7 +152,7 @@ class FirstFragment : Fragment() {
 
                         MorningAlarmManager.get {
                             CoroutineScope(Dispatchers.Main).launch {
-                                Snackbar.make(binding.root, "同期に成功しました！", Snackbar.LENGTH_LONG)
+                                Snackbar.make(binding.root, getString(R.string.sync_successful), Snackbar.LENGTH_LONG)
                                     .show()
                                 AlarmsAdapter.notifyDataSetChanged()
                             }
