@@ -82,7 +82,7 @@ class FirstFragment : Fragment() {
     override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?,
             savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 
         _binding = FragmentFirstBinding.inflate(inflater, container, false)
         return binding.root
@@ -174,7 +174,6 @@ class FirstFragment : Fragment() {
             ItemTouchHelper.ACTION_STATE_IDLE,
             ItemTouchHelper.RIGHT or ItemTouchHelper.LEFT
         ) {
-
             override fun onMove(
                 recyclerView: RecyclerView,
                 viewHolder: RecyclerView.ViewHolder,

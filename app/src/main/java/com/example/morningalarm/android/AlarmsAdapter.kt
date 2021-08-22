@@ -10,11 +10,7 @@ import com.example.morningalarm.android.databinding.AlarmsRowItemBinding
 object AlarmsAdapter :RecyclerView.Adapter<AlarmsAdapter.ViewHolder>() {
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val timeTextView: TextView
-
-        init {
-            timeTextView = view.findViewById(R.id.timeTextView)
-        }
+        val timeTextView: TextView = view.findViewById(R.id.timeTextView)
     }
 
 

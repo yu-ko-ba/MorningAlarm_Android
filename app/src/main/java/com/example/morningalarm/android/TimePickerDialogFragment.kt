@@ -7,9 +7,9 @@ import android.os.Bundle
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
 
-class TimePickerDialogFragment(val parentsContext: Context, val hourOfDay: Int, val minute: Int, val is24HourView: Boolean) : DialogFragment() {
+class TimePickerDialogFragment(private val parentsContext: Context, private val hourOfDay: Int, private val minute: Int, private val is24HourView: Boolean) : DialogFragment() {
 
-    private var onTimeSetListener: (hourOfDay: Int, minute: Int) -> Unit = { hourOfDay, minute -> }
+    private var onTimeSetListener: (hourOfDay: Int, minute: Int) -> Unit = { _, _ -> }
     private var onCancelListener: () -> Unit = {}
 
 
