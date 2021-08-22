@@ -41,7 +41,7 @@ class FirstFragment : Fragment() {
 
         binding.swipeRefreshLayout.isRefreshing = true
 
-        sharedPreferences = this.requireContext().getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE)
+        sharedPreferences = this.requireContext().getSharedPreferences(getString(R.string.preferences_name), Context.MODE_PRIVATE)
 
         sharedPreferences.getString(getString(R.string.server_address_key), "192.168.128.207")?.let {
             MorningAlarmManager.serverAddress = it

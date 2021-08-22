@@ -4,7 +4,7 @@
     <string name="default_server_address" translatable="false">192.168.128.207</string>
     <string name="default_port_number" translatable="false">5000</string>
 
-    <string name="preference_key" translatable="false">preference_key</string>
+    <string name="preferences_name" translatable="false">morning_alarm_preferences</string>
     <string name="server_address_key" translatable="false">server_address</string>
     <string name="port_number_key" translatable="false">port_number</string>
 
