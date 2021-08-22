@@ -5,11 +5,11 @@ import android.content.Context
 import android.os.Bundle
 import com.example.morningalarm.android.databinding.DialogTimePickerBinding
 
-class TimePickerDialog(context: Context, val hourOfDay: Int, val minute: Int, val is24HourView: Boolean) : Dialog(context) {
+class TimePickerDialog(context: Context, private val hourOfDay: Int, private val minute: Int, private val is24HourView: Boolean) : Dialog(context) {
 
     private lateinit var binding: DialogTimePickerBinding
 
-    private var onPositiveButtonClickListener: (hourOfDay: Int, minute: Int) -> Unit = {hourOfDay, minute ->  }
+    private var onPositiveButtonClickListener: (hourOfDay: Int, minute: Int) -> Unit = { _, _ ->  }
     private var onNegativeButtonClickListener: () -> Unit = {}
 
 

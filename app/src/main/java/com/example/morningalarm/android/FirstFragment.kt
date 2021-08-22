@@ -41,12 +41,12 @@ class FirstFragment : Fragment() {
 
         binding.swipeRefreshLayout.isRefreshing = true
 
-        sharedPreferences = this.requireContext().getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE)
+        sharedPreferences = this.requireContext().getSharedPreferences(getString(R.string.preferences_name), Context.MODE_PRIVATE)
 
-        sharedPreferences.getString(getString(R.string.server_address_key), "192.168.128.207")?.let {
+        sharedPreferences.getString(getString(R.string.server_address_key), getString(R.string.default_server_address))?.let {
             MorningAlarmManager.serverAddress = it
         }
-        sharedPreferences.getString(getString(R.string.port_number_key), "5000")?.let {
+        sharedPreferences.getString(getString(R.string.port_number_key), getString(R.string.default_port_number))?.let {
             MorningAlarmManager.portNumber = it
         }
 
@@ -82,7 +82,7 @@ class FirstFragment : Fragment() {
     override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?,
             savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 
         _binding = FragmentFirstBinding.inflate(inflater, container, false)
         return binding.root
@@ -174,7 +174,6 @@ class FirstFragment : Fragment() {
             ItemTouchHelper.ACTION_STATE_IDLE,
             ItemTouchHelper.RIGHT or ItemTouchHelper.LEFT
         ) {
-
             override fun onMove(
                 recyclerView: RecyclerView,
                 viewHolder: RecyclerView.ViewHolder,
