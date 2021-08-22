@@ -1,16 +1,14 @@
 <resources>
     <string name="app_name" translatable="false">Morning alarm</string>
+
+    <string name="default_server_address" translatable="false">192.168.128.207</string>
+    <string name="default_port_number" translatable="false">5000</string>
+
+    <string name="preference_key" translatable="false">preference_key</string>
+    <string name="server_address_key" translatable="false">server_address</string>
+    <string name="port_number_key" translatable="false">port_number</string>
+
     <string name="settings">Settings</string>
-    <!-- Strings used for fragments for navigation -->
-    <string name="first_fragment_label" translatable="false">First Fragment</string>
-    <string name="second_fragment_label" translatable="false">Second Fragment</string>
-    <string name="next" translatable="false">Next</string>
-    <string name="previous" translatable="false">Previous</string>
-
-    <string name="sync" translatable="false">Sync</string>
-
-    <string name="ok">OK</string>
-    <string name="cancel">Cancel</string>
 
     <string name="sync_successful">Sync successful!</string>
     <string name="sync_failed">Sync failed.</string>
@@ -18,13 +16,6 @@
     <string name="server_address">Server Address</string>
     <string name="port_number">Port Number</string>
 
-    <string name="default_server_address" translatable="false">192.168.128.207</string>
-    <string name="default_port_number" translatable="false">5000</string>
-
-    <string name="hello_first_fragment" translatable="false">Hello first fragment</string>
-    <string name="hello_second_fragment" translatable="false">Hello second fragment. Arg: %1$s</string>
-
-    <string name="preference_key" translatable="false">preference_key</string>
-    <string name="server_address_key" translatable="false">server_address</string>
-    <string name="port_number_key" translatable="false">port_number</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
 </resources>
