@@ -73,7 +73,7 @@ class AlarmListFragment : Fragment() {
 
         MorningAlarmManager.get {
             CoroutineScope(Dispatchers.Main).launch {
-                AlarmsAdapter.notifyDataSetChanged()
+                AlarmListAdapter.notifyDataSetChanged()
             }
         }
     }
@@ -95,13 +95,13 @@ class AlarmListFragment : Fragment() {
 
         setHasOptionsMenu(true)
 
-        binding.alarmsRecyclerView.layoutManager = LinearLayoutManager(this.requireContext())
+        binding.alarmListRecyclerView.layoutManager = LinearLayoutManager(this.requireContext())
         val keys = mutableListOf<String>()
         for (key in MorningAlarmManager.getKeys()) {
             keys.add(key)
         }
-        getSwipeActionHelper(AlarmsAdapter).attachToRecyclerView(binding.alarmsRecyclerView)
-        binding.alarmsRecyclerView.adapter = AlarmsAdapter
+        getSwipeActionHelper(AlarmListAdapter).attachToRecyclerView(binding.alarmListRecyclerView)
+        binding.alarmListRecyclerView.adapter = AlarmListAdapter
 
         binding.swipeRefreshLayout.setOnRefreshListener {
             refreshItems()
@@ -113,7 +113,7 @@ class AlarmListFragment : Fragment() {
     private fun refreshItems() {
         MorningAlarmManager.get {
             CoroutineScope(Dispatchers.Main).launch {
-                AlarmsAdapter.notifyDataSetChanged()
+                AlarmListAdapter.notifyDataSetChanged()
             }
         }
     }
@@ -154,7 +154,7 @@ class AlarmListFragment : Fragment() {
                             CoroutineScope(Dispatchers.Main).launch {
                                 Snackbar.make(binding.root, getString(R.string.sync_successful), Snackbar.LENGTH_LONG)
                                     .show()
-                                AlarmsAdapter.notifyDataSetChanged()
+                                AlarmListAdapter.notifyDataSetChanged()
                             }
                         }
                     }
@@ -169,7 +169,7 @@ class AlarmListFragment : Fragment() {
     }
 
 
-    private fun getSwipeActionHelper(adapter: AlarmsAdapter) =
+    private fun getSwipeActionHelper(adapter: AlarmListAdapter) =
         ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(
             ItemTouchHelper.ACTION_STATE_IDLE,
             ItemTouchHelper.RIGHT or ItemTouchHelper.LEFT

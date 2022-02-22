@@ -5,22 +5,22 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.morningalarm.android.databinding.AlarmsRowItemBinding
+import com.example.morningalarm.android.databinding.AlarmListRowItemBinding
 
-object AlarmsAdapter :RecyclerView.Adapter<AlarmsAdapter.ViewHolder>() {
+object AlarmListAdapter :RecyclerView.Adapter<AlarmListAdapter.ViewHolder>() {
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val timeTextView: TextView = view.findViewById(R.id.timeTextView)
     }
 
 
-    private lateinit var binding: AlarmsRowItemBinding
+    private lateinit var binding: AlarmListRowItemBinding
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.alarms_row_item, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.alarm_list_row_item, parent, false)
 
-        binding = AlarmsRowItemBinding.bind(view)
+        binding = AlarmListRowItemBinding.bind(view)
 
         return ViewHolder(view)
     }
