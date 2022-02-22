@@ -15,20 +15,20 @@ import androidx.appcompat.content.res.AppCompatResources
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.morningalarm.android.databinding.FragmentFirstBinding
+import com.example.morningalarm.android.databinding.FragmentAlarmListBinding
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.*
 
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.
  */
-class FirstFragment : Fragment() {
+class AlarmListFragment : Fragment() {
 
-    private var _binding: FragmentFirstBinding? = null
+    private var _binding: FragmentAlarmListBinding? = null
 
     // This property is only valid between onCreate and
     // onDestroyView.
-    private lateinit var binding: FragmentFirstBinding
+    private lateinit var binding: FragmentAlarmListBinding
 
     private lateinit var sharedPreferences: SharedPreferences
 
@@ -37,7 +37,7 @@ class FirstFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        binding = FragmentFirstBinding.inflate(layoutInflater)
+        binding = FragmentAlarmListBinding.inflate(layoutInflater)
 
         binding.swipeRefreshLayout.isRefreshing = true
 
@@ -84,7 +84,7 @@ class FirstFragment : Fragment() {
             savedInstanceState: Bundle?
     ): View {
 
-        _binding = FragmentFirstBinding.inflate(inflater, container, false)
+        _binding = FragmentAlarmListBinding.inflate(inflater, container, false)
         return binding.root
 
     }
@@ -269,7 +269,7 @@ class FirstFragment : Fragment() {
                         itemView.bottom
                     )
 
-                    val changeIcon = AppCompatResources.getDrawable(this@FirstFragment.requireContext(), R.drawable.ic_baseline_settings_24)!!
+                    val changeIcon = AppCompatResources.getDrawable(this@AlarmListFragment.requireContext(), R.drawable.ic_baseline_settings_24)!!
                     val iconMargin = (itemView.height - changeIcon.intrinsicHeight) / 2
                     changeIcon.setBounds(
                         itemView.right - iconMargin - changeIcon.intrinsicWidth,
@@ -290,7 +290,7 @@ class FirstFragment : Fragment() {
                         itemView.bottom
                     )
 
-                    val deleteIcon = AppCompatResources.getDrawable(this@FirstFragment.requireContext(), R.drawable.ic_baseline_delete_24)!!
+                    val deleteIcon = AppCompatResources.getDrawable(this@AlarmListFragment.requireContext(), R.drawable.ic_baseline_delete_24)!!
                     val iconMargin = (itemView.height - deleteIcon.intrinsicHeight) / 2
                     deleteIcon.setBounds(
                         itemView.left + iconMargin,
