@@ -1,4 +1,4 @@
-package com.example.morningalarm.android
+package com.example.morningalarm.android.ui
 
 import android.app.Dialog
 import android.content.Context
@@ -6,6 +6,7 @@ import android.content.DialogInterface
 import android.os.Bundle
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
+import com.example.morningalarm.android.ui.TimePickerDialog
 
 class TimePickerDialogFragment(private val parentsContext: Context, private val hourOfDay: Int, private val minute: Int, private val is24HourView: Boolean) : DialogFragment() {
 

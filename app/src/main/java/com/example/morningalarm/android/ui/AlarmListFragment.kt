@@ -1,4 +1,4 @@
-package com.example.morningalarm.android
+package com.example.morningalarm.android.ui
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -15,6 +15,8 @@ import androidx.appcompat.content.res.AppCompatResources
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.morningalarm.android.MorningAlarmManager
+import com.example.morningalarm.android.R
 import com.example.morningalarm.android.databinding.FragmentAlarmListBinding
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.*
@@ -124,7 +126,8 @@ class AlarmListFragment : Fragment() {
         return when (item.itemId) {
             R.id.action_settings -> {
                 val view = this.layoutInflater.inflate(R.layout.dialog_settings, null)
-                view.findViewById<EditText>(R.id.serverAddress).hint = MorningAlarmManager.serverAddress
+                view.findViewById<EditText>(R.id.serverAddress).hint =
+                    MorningAlarmManager.serverAddress
                 view.findViewById<EditText>(R.id.portNumber).hint = MorningAlarmManager.portNumber
 
                 AlertDialog.Builder(this.requireContext())
@@ -152,7 +155,11 @@ class AlarmListFragment : Fragment() {
 
                         MorningAlarmManager.get {
                             CoroutineScope(Dispatchers.Main).launch {
-                                Snackbar.make(binding.root, getString(R.string.sync_successful), Snackbar.LENGTH_LONG)
+                                Snackbar.make(
+                                    binding.root,
+                                    getString(R.string.sync_successful),
+                                    Snackbar.LENGTH_LONG
+                                )
                                     .show()
                                 AlarmListAdapter.notifyDataSetChanged()
                             }
@@ -269,7 +276,9 @@ class AlarmListFragment : Fragment() {
                         itemView.bottom
                     )
 
-                    val changeIcon = AppCompatResources.getDrawable(this@AlarmListFragment.requireContext(), R.drawable.ic_baseline_settings_24)!!
+                    val changeIcon = AppCompatResources.getDrawable(this@AlarmListFragment.requireContext(),
+                        R.drawable.ic_baseline_settings_24
+                    )!!
                     val iconMargin = (itemView.height - changeIcon.intrinsicHeight) / 2
                     changeIcon.setBounds(
                         itemView.right - iconMargin - changeIcon.intrinsicWidth,
@@ -290,7 +299,9 @@ class AlarmListFragment : Fragment() {
                         itemView.bottom
                     )
 
-                    val deleteIcon = AppCompatResources.getDrawable(this@AlarmListFragment.requireContext(), R.drawable.ic_baseline_delete_24)!!
+                    val deleteIcon = AppCompatResources.getDrawable(this@AlarmListFragment.requireContext(),
+                        R.drawable.ic_baseline_delete_24
+                    )!!
                     val iconMargin = (itemView.height - deleteIcon.intrinsicHeight) / 2
                     deleteIcon.setBounds(
                         itemView.left + iconMargin,

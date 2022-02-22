@@ -1,10 +1,12 @@
-package com.example.morningalarm.android
+package com.example.morningalarm.android.ui
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.morningalarm.android.MorningAlarmManager
+import com.example.morningalarm.android.R
 import com.example.morningalarm.android.databinding.AlarmListRowItemBinding
 
 object AlarmListAdapter :RecyclerView.Adapter<AlarmListAdapter.ViewHolder>() {
@@ -27,7 +29,8 @@ object AlarmListAdapter :RecyclerView.Adapter<AlarmListAdapter.ViewHolder>() {
 
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.timeTextView.text = MorningAlarmManager.getData().getString(MorningAlarmManager.getKeys()[position])
+        holder.timeTextView.text = MorningAlarmManager.getData()
+            .getString(MorningAlarmManager.getKeys()[position])
     }
 
 

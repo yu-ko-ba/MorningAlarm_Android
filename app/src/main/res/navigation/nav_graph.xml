@@ -7,6 +7,6 @@
 
     <fragment
         android:id="@+id/AlarmListFragment"
-        android:name="com.example.morningalarm.android.AlarmListFragment"
+        android:name="com.example.morningalarm.android.ui.AlarmListFragment"
         tools:layout="@layout/fragment_alarm_list"/>
 </navigation>

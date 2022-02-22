@@ -1,4 +1,4 @@
-package com.example.morningalarm.android
+package com.example.morningalarm.android.ui
 
 import android.app.Dialog
 import android.content.Context

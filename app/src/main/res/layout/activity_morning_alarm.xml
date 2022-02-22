@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:theme="@style/Theme.MorningAlarm"
-    tools:context=".MorningAlarmActivity">
+    tools:context=".ui.MorningAlarmActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"

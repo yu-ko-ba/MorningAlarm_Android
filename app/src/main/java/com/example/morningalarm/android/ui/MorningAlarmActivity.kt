@@ -1,4 +1,4 @@
-package com.example.morningalarm.android
+package com.example.morningalarm.android.ui
 
 import android.annotation.SuppressLint
 import android.os.Bundle
@@ -8,6 +8,8 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import android.view.Menu
+import com.example.morningalarm.android.MorningAlarmManager
+import com.example.morningalarm.android.R
 import com.example.morningalarm.android.databinding.ActivityMorningAlarmBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
