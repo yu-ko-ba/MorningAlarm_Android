@@ -1,5 +1,6 @@
 package com.example.morningalarm.android.ui
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -28,7 +29,14 @@ class AlarmListAdapter : ListAdapter<AlarmListItemUiState, AlarmListAdapter.View
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.timeTextView.text = getItem(position).timeText
+        val item = getItem(position)
+        holder.timeTextView.text = item.timeText
+
+        if(item.isSynchronized) {
+            holder.itemView.background.alpha = 255
+        }else {
+            holder.itemView.background.alpha = (255 * 0.7f).toInt()
+        }
     }
 
     internal class AlarmListCallback : DiffUtil.ItemCallback<AlarmListItemUiState>() {

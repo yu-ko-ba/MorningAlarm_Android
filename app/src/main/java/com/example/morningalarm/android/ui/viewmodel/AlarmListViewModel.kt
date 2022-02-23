@@ -44,14 +44,17 @@ class AlarmListViewModel(
     }
 
     fun addAlarm(input: TimePickerInputUiState){
+        val newAlarm = Alarm(
+            UUID.randomUUID().toString(),
+            input.hourOfDay,
+            input.minute
+        )
+        val newItem = alarmListItemUiStateConverter.fromAlarm(newAlarm).also { it.isSynchronized = false }
+        val list = ArrayList(_alarmListItemUiState.value)
+        list.add(newItem)
+        _alarmListItemUiState.value = list
         viewModelScope.launch {
-            val result = addAlarmUseCase.invoke(
-                Alarm(
-                    UUID.randomUUID().toString(),
-                    input.hourOfDay,
-                    input.minute
-                )
-            )
+            val result = addAlarmUseCase.invoke(newAlarm)
             if(result is AddAlarmUseCaseResult.Success){
                 _alarmListItemUiState.value = alarmListItemUiStateConverter.fromAlarmList(result.alarmList)
             }
