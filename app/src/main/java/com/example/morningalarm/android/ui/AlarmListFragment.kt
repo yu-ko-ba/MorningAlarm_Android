@@ -96,6 +96,14 @@ class AlarmListFragment : Fragment() {
                 AlarmListAdapter.notifyDataSetChanged()
             }
         }
+
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.alarmListItemUiState.collect { uiState ->
+
+                }
+            }
+        }
     }
 
 
