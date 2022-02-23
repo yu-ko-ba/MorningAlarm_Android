@@ -33,18 +33,6 @@ class MorningAlarmActivity : AppCompatActivity() {
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         appBarConfiguration = AppBarConfiguration(navController.graph)
         setupActionBarWithNavController(navController, appBarConfiguration)
-
-        binding.addButton.setOnClickListener {
-            val dialog = TimePickerDialogFragment(this, 7, 0, true)
-            dialog.setOnTimeSetListener { hourOfDay, minute ->
-                MorningAlarmManager.add(hourOfDay, minute) {
-                    CoroutineScope(Dispatchers.Main).launch {
-                        //AlarmListAdapter.notifyItemInserted(MorningAlarmManager.getKeys().size - 1)
-                    }
-                }
-            }
-            dialog.show(supportFragmentManager)
-        }
     }
 
 

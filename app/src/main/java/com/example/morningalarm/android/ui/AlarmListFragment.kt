@@ -136,6 +136,18 @@ class AlarmListFragment : Fragment() {
         binding.swipeRefreshLayout.setOnRefreshListener {
             viewModel.fetchAlarmList()
         }
+
+        binding.addButton.setOnClickListener {
+            val dialog = TimePickerDialogFragment(requireContext(), 7, 0, true)
+            dialog.setOnTimeSetListener { hourOfDay, minute ->
+                MorningAlarmManager.add(hourOfDay, minute) {
+                    CoroutineScope(Dispatchers.Main).launch {
+                        //AlarmListAdapter.notifyItemInserted(MorningAlarmManager.getKeys().size - 1)
+                    }
+                }
+            }
+            dialog.show(childFragmentManager)
+        }
     }
 
     @SuppressLint("CutPasteId", "NotifyDataSetChanged")
