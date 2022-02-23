@@ -9,7 +9,9 @@ class AlarmListItemUiStateConverter {
         list.map {
             AlarmListItemUiState(
                 it.id,
-                "${it.hour}:${it.minutes}"
+                "${formatDigit(it.hour)}:${formatDigit(it.minutes)}"
             )
         }
+
+    private fun formatDigit(number : Int) = "%0,2d".format(number)
 }
