@@ -12,12 +12,20 @@ import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.appcompat.content.res.AppCompatResources
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.morningalarm.android.MorningAlarmManager
 import com.example.morningalarm.android.R
+import com.example.morningalarm.android.data.datasource.impl.LocalDataSource
+import com.example.morningalarm.android.data.repository.AlarmRepository
 import com.example.morningalarm.android.databinding.FragmentAlarmListBinding
+import com.example.morningalarm.android.domain.usecase.FetchAlarmListUseCase
+import com.example.morningalarm.android.ui.viewmodel.AlarmListViewModel
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.*
 
@@ -34,10 +42,20 @@ class AlarmListFragment : Fragment() {
 
     private lateinit var sharedPreferences: SharedPreferences
 
+    private lateinit var viewModel: AlarmListViewModel
 
     @SuppressLint("NotifyDataSetChanged")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val localDataSource = LocalDataSource()
+        val alarmRepository = AlarmRepository(localDataSource)
+        viewModel = ViewModelProvider(
+            this,
+            AlarmListViewModel.Factory(
+                fetchAlarmListUseCase = FetchAlarmListUseCase(alarmRepository)
+            )
+        )[AlarmListViewModel::class.java]
 
         binding = FragmentAlarmListBinding.inflate(layoutInflater)
 
