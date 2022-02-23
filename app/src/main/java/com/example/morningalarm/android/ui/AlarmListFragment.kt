@@ -61,8 +61,6 @@ class AlarmListFragment : Fragment() {
 
         binding = FragmentAlarmListBinding.inflate(layoutInflater)
 
-        binding.swipeRefreshLayout.isRefreshing = true
-
         sharedPreferences = this.requireContext().getSharedPreferences(getString(R.string.preferences_name), Context.MODE_PRIVATE)
 
         sharedPreferences.getString(getString(R.string.server_address_key), getString(R.string.default_server_address))?.let {
@@ -71,23 +69,11 @@ class AlarmListFragment : Fragment() {
         sharedPreferences.getString(getString(R.string.port_number_key), getString(R.string.default_port_number))?.let {
             MorningAlarmManager.portNumber = it
         }
-
-        MorningAlarmManager.setOnOperationStartListener {
-            CoroutineScope(Dispatchers.Main).launch {
-                binding.swipeRefreshLayout.isRefreshing = true
-            }
-        }
-        MorningAlarmManager.setOnSucceedListener {
-            CoroutineScope(Dispatchers.Main).launch {
-                binding.swipeRefreshLayout.isRefreshing = false
-            }
-        }
         MorningAlarmManager.setOnFailedListener {
             runBlocking {
                 delay(5000)
             }
             CoroutineScope(Dispatchers.Main).launch {
-                binding.swipeRefreshLayout.isRefreshing = false
                 Snackbar.make(binding.root, getString(R.string.sync_failed), Snackbar.LENGTH_LONG)
                     .show()
             }
@@ -97,6 +83,14 @@ class AlarmListFragment : Fragment() {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.alarmListItemUiState.collect { uiState ->
                     alarmListAdapter.submitList(uiState)
+                }
+            }
+        }
+
+        lifecycleScope.launch{
+            repeatOnLifecycle(Lifecycle.State.STARTED){
+                viewModel.syncListUiState.collect {
+                    binding.swipeRefreshLayout.isRefreshing = it.isRefreshing
                 }
             }
         }
@@ -145,7 +139,6 @@ class AlarmListFragment : Fragment() {
                     .setTitle(getString(R.string.settings))
                     .setView(view)
                     .setPositiveButton(getString(R.string.ok)) { _, _ ->
-                        binding.swipeRefreshLayout.isRefreshing = true
 
                         val serverAddress =
                             view.findViewById<EditText>(R.id.serverAddress).text.toString()
