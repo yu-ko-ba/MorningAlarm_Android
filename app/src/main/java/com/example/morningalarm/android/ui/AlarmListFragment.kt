@@ -25,6 +25,7 @@ import com.example.morningalarm.android.data.datasource.impl.LocalDataSource
 import com.example.morningalarm.android.data.repository.AlarmRepository
 import com.example.morningalarm.android.databinding.FragmentAlarmListBinding
 import com.example.morningalarm.android.domain.usecase.fetchalarmlist.FetchAlarmListUseCase
+import com.example.morningalarm.android.ui.uistate.SyncListUiState
 import com.example.morningalarm.android.ui.viewmodel.AlarmListViewModel
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.*
@@ -69,15 +70,6 @@ class AlarmListFragment : Fragment() {
         sharedPreferences.getString(getString(R.string.port_number_key), getString(R.string.default_port_number))?.let {
             MorningAlarmManager.portNumber = it
         }
-        MorningAlarmManager.setOnFailedListener {
-            runBlocking {
-                delay(5000)
-            }
-            CoroutineScope(Dispatchers.Main).launch {
-                Snackbar.make(binding.root, getString(R.string.sync_failed), Snackbar.LENGTH_LONG)
-                    .show()
-            }
-        }
 
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -91,6 +83,26 @@ class AlarmListFragment : Fragment() {
             repeatOnLifecycle(Lifecycle.State.STARTED){
                 viewModel.syncListUiState.collect {
                     binding.swipeRefreshLayout.isRefreshing = it.isRefreshing
+
+                    when(it){
+                        SyncListUiState.Success -> {
+                            Snackbar.make(
+                                binding.root,
+                                getString(R.string.sync_successful),
+                                Snackbar.LENGTH_LONG
+                            ).show()
+                        }
+                        SyncListUiState.Failure -> {
+                            Snackbar.make(
+                                binding.root,
+                                getString(R.string.sync_failed),
+                                Snackbar.LENGTH_LONG
+                            ).show()
+                        }
+                        else -> {
+                            // noop
+                        }
+                    }
                 }
             }
         }
@@ -156,18 +168,7 @@ class AlarmListFragment : Fragment() {
                             sharedPreferences.edit()
                                 .putString(getString(R.string.port_number_key), portNumber).apply()
                         }
-
-                        MorningAlarmManager.get {
-                            CoroutineScope(Dispatchers.Main).launch {
-                                Snackbar.make(
-                                    binding.root,
-                                    getString(R.string.sync_successful),
-                                    Snackbar.LENGTH_LONG
-                                )
-                                    .show()
-                                alarmListAdapter.notifyDataSetChanged()
-                            }
-                        }
+                        viewModel.fetchAlarmList()
                     }
                     .setNegativeButton(getString(R.string.cancel)) { dialog, _ ->
                         dialog.cancel()

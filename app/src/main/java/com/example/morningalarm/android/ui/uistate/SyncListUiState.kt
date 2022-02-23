@@ -6,4 +6,8 @@ sealed class SyncListUiState (
     object NotLoaded : SyncListUiState(isRefreshing = false)
 
     object Loading : SyncListUiState(isRefreshing = true)
+
+    object Success : SyncListUiState(isRefreshing = false)
+
+    object Failure : SyncListUiState(isRefreshing = false)
 }

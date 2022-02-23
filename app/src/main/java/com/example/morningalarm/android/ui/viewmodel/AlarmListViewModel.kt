@@ -30,6 +30,9 @@ class AlarmListViewModel(private val fetchAlarmListUseCase: FetchAlarmListUseCas
                         "${it.hour}:${it.minutes}"
                     )
                 }
+                _syncListUiState.value = SyncListUiState.Success
+            } else {
+                _syncListUiState.value = SyncListUiState.Failure
             }
             _syncListUiState.value = SyncListUiState.NotLoaded
         }
