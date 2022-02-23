@@ -3,7 +3,8 @@ package com.example.morningalarm.android.ui.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.example.morningalarm.android.domain.usecase.FetchAlarmListUseCase
+import com.example.morningalarm.android.domain.usecase.fetchalarmlist.FetchAlarmListUseCase
+import com.example.morningalarm.android.domain.usecase.fetchalarmlist.FetchAlarmListUseCaseResult
 import com.example.morningalarm.android.ui.uistate.AlarmListItemUiState
 import com.example.morningalarm.android.ui.uistate.SyncListUiState
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -21,11 +22,14 @@ class AlarmListViewModel(private val fetchAlarmListUseCase: FetchAlarmListUseCas
     fun fetchAlarmList() {
         _syncListUiState.value = SyncListUiState.Loading
         viewModelScope.launch {
-            _alarmListItemUiState.value = fetchAlarmListUseCase.invoke().map {
-                AlarmListItemUiState(
-                    it.id,
-                    "${it.hour}:${it.minutes}"
-                )
+            val result = fetchAlarmListUseCase.invoke()
+            if(result is FetchAlarmListUseCaseResult.Success){
+                _alarmListItemUiState.value = result.alarmList.map {
+                    AlarmListItemUiState(
+                        it.id,
+                        "${it.hour}:${it.minutes}"
+                    )
+                }
             }
             _syncListUiState.value = SyncListUiState.NotLoaded
         }

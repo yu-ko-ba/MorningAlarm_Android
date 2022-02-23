@@ -24,7 +24,7 @@ import com.example.morningalarm.android.R
 import com.example.morningalarm.android.data.datasource.impl.LocalDataSource
 import com.example.morningalarm.android.data.repository.AlarmRepository
 import com.example.morningalarm.android.databinding.FragmentAlarmListBinding
-import com.example.morningalarm.android.domain.usecase.FetchAlarmListUseCase
+import com.example.morningalarm.android.domain.usecase.fetchalarmlist.FetchAlarmListUseCase
 import com.example.morningalarm.android.ui.viewmodel.AlarmListViewModel
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.*
