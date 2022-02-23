@@ -44,6 +44,8 @@ class AlarmListFragment : Fragment() {
 
     private lateinit var viewModel: AlarmListViewModel
 
+    private val alarmListAdapter = AlarmListAdapter()
+
     @SuppressLint("NotifyDataSetChanged")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -91,16 +93,10 @@ class AlarmListFragment : Fragment() {
             }
         }
 
-        MorningAlarmManager.get {
-            CoroutineScope(Dispatchers.Main).launch {
-                AlarmListAdapter.notifyDataSetChanged()
-            }
-        }
-
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.alarmListItemUiState.collect { uiState ->
-
+                    alarmListAdapter.submitList(uiState)
                 }
             }
         }
@@ -128,24 +124,13 @@ class AlarmListFragment : Fragment() {
         for (key in MorningAlarmManager.getKeys()) {
             keys.add(key)
         }
-        getSwipeActionHelper(AlarmListAdapter).attachToRecyclerView(binding.alarmListRecyclerView)
-        binding.alarmListRecyclerView.adapter = AlarmListAdapter
+        getSwipeActionHelper(alarmListAdapter).attachToRecyclerView(binding.alarmListRecyclerView)
+        binding.alarmListRecyclerView.adapter = alarmListAdapter
 
         binding.swipeRefreshLayout.setOnRefreshListener {
-            refreshItems()
+            viewModel.fetchAlarmList()
         }
     }
-
-
-    @SuppressLint("NotifyDataSetChanged")
-    private fun refreshItems() {
-        MorningAlarmManager.get {
-            CoroutineScope(Dispatchers.Main).launch {
-                AlarmListAdapter.notifyDataSetChanged()
-            }
-        }
-    }
-
 
     @SuppressLint("CutPasteId", "NotifyDataSetChanged")
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -187,7 +172,7 @@ class AlarmListFragment : Fragment() {
                                     Snackbar.LENGTH_LONG
                                 )
                                     .show()
-                                AlarmListAdapter.notifyDataSetChanged()
+                                alarmListAdapter.notifyDataSetChanged()
                             }
                         }
                     }

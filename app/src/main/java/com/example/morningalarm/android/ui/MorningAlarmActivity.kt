@@ -39,7 +39,7 @@ class MorningAlarmActivity : AppCompatActivity() {
             dialog.setOnTimeSetListener { hourOfDay, minute ->
                 MorningAlarmManager.add(hourOfDay, minute) {
                     CoroutineScope(Dispatchers.Main).launch {
-                        AlarmListAdapter.notifyItemInserted(MorningAlarmManager.getKeys().size - 1)
+                        //AlarmListAdapter.notifyItemInserted(MorningAlarmManager.getKeys().size - 1)
                     }
                 }
             }
