@@ -8,6 +8,7 @@ import com.example.morningalarm.android.domain.usecase.addalarm.AddAlarmUseCase
 import com.example.morningalarm.android.domain.usecase.addalarm.AddAlarmUseCaseResult
 import com.example.morningalarm.android.domain.usecase.fetchalarmlist.FetchAlarmListUseCase
 import com.example.morningalarm.android.domain.usecase.fetchalarmlist.FetchAlarmListUseCaseResult
+import com.example.morningalarm.android.ui.converter.AlarmListItemUiStateConverter
 import com.example.morningalarm.android.ui.uistate.AlarmListItemUiState
 import com.example.morningalarm.android.ui.uistate.SyncListUiState
 import com.example.morningalarm.android.ui.uistate.TimePickerInputUiState
@@ -18,7 +19,8 @@ import java.util.*
 
 class AlarmListViewModel(
     private val fetchAlarmListUseCase: FetchAlarmListUseCase,
-    private val addAlarmUseCase: AddAlarmUseCase
+    private val addAlarmUseCase: AddAlarmUseCase,
+    private val alarmListItemUiStateConverter: AlarmListItemUiStateConverter = AlarmListItemUiStateConverter()
 ): ViewModel() {
 
     private val _syncListUiState = MutableStateFlow<SyncListUiState>(SyncListUiState.NotLoaded)
@@ -32,12 +34,7 @@ class AlarmListViewModel(
         viewModelScope.launch {
             val result = fetchAlarmListUseCase.invoke()
             if(result is FetchAlarmListUseCaseResult.Success){
-                _alarmListItemUiState.value = result.alarmList.map {
-                    AlarmListItemUiState(
-                        it.id,
-                        "${it.hour}:${it.minutes}"
-                    )
-                }
+                _alarmListItemUiState.value = alarmListItemUiStateConverter.fromAlarmList(result.alarmList)
                 _syncListUiState.value = SyncListUiState.Success
             } else {
                 _syncListUiState.value = SyncListUiState.Failure
@@ -56,12 +53,7 @@ class AlarmListViewModel(
                 )
             )
             if(result is AddAlarmUseCaseResult.Success){
-                _alarmListItemUiState.value = result.alarmList.map {
-                    AlarmListItemUiState(
-                        it.id,
-                        "${it.hour}:${it.minutes}"
-                    )
-                }
+                _alarmListItemUiState.value = alarmListItemUiStateConverter.fromAlarmList(result.alarmList)
             }
         }
     }
