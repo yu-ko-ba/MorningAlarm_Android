@@ -4,16 +4,17 @@ import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
 import com.example.morningalarm.android.databinding.DialogTimePickerBinding
+import com.example.morningalarm.android.ui.uistate.TimePickerInputUiState
 
 class TimePickerDialog(context: Context, private val hourOfDay: Int, private val minute: Int, private val is24HourView: Boolean) : Dialog(context) {
 
     private lateinit var binding: DialogTimePickerBinding
 
-    private var onPositiveButtonClickListener: (hourOfDay: Int, minute: Int) -> Unit = { _, _ ->  }
+    private var onPositiveButtonClickListener: (input: TimePickerInputUiState) -> Unit = { _ ->  }
     private var onNegativeButtonClickListener: () -> Unit = {}
 
 
-    fun setOnPositiveButtonClickListener(listener: (hourOfDay: Int, minute: Int) -> Unit) {
+    fun setOnPositiveButtonClickListener(listener: (input: TimePickerInputUiState) -> Unit) {
         onPositiveButtonClickListener = listener
     }
 
@@ -34,7 +35,8 @@ class TimePickerDialog(context: Context, private val hourOfDay: Int, private val
         binding.timePicker.setIs24HourView(is24HourView)
 
         binding.positiveButton.setOnClickListener {
-            onPositiveButtonClickListener(binding.timePicker.hour, binding.timePicker.minute)
+            val input = TimePickerInputUiState(binding.timePicker.hour, binding.timePicker.minute)
+            onPositiveButtonClickListener(input)
 
             dismiss()
         }

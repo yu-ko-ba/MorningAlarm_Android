@@ -24,6 +24,7 @@ import com.example.morningalarm.android.R
 import com.example.morningalarm.android.data.datasource.impl.LocalDataSource
 import com.example.morningalarm.android.data.repository.AlarmRepository
 import com.example.morningalarm.android.databinding.FragmentAlarmListBinding
+import com.example.morningalarm.android.domain.usecase.addalarm.AddAlarmUseCase
 import com.example.morningalarm.android.domain.usecase.fetchalarmlist.FetchAlarmListUseCase
 import com.example.morningalarm.android.ui.uistate.SyncListUiState
 import com.example.morningalarm.android.ui.viewmodel.AlarmListViewModel
@@ -56,7 +57,8 @@ class AlarmListFragment : Fragment() {
         viewModel = ViewModelProvider(
             this,
             AlarmListViewModel.Factory(
-                fetchAlarmListUseCase = FetchAlarmListUseCase(alarmRepository)
+                fetchAlarmListUseCase = FetchAlarmListUseCase(alarmRepository),
+                addAlarmUseCase = AddAlarmUseCase(alarmRepository)
             )
         )[AlarmListViewModel::class.java]
 
@@ -139,12 +141,8 @@ class AlarmListFragment : Fragment() {
 
         binding.addButton.setOnClickListener {
             val dialog = TimePickerDialogFragment(requireContext(), 7, 0, true)
-            dialog.setOnTimeSetListener { hourOfDay, minute ->
-                MorningAlarmManager.add(hourOfDay, minute) {
-                    CoroutineScope(Dispatchers.Main).launch {
-                        //AlarmListAdapter.notifyItemInserted(MorningAlarmManager.getKeys().size - 1)
-                    }
-                }
+            dialog.setOnTimeSetListener { input ->
+                viewModel.addAlarm(input)
             }
             dialog.show(childFragmentManager)
         }
@@ -215,11 +213,11 @@ class AlarmListFragment : Fragment() {
                     ItemTouchHelper.LEFT -> {
                         // 時間を変更する
                         val dialog = TimePickerDialogFragment(requireContext(), 7, 0, true)
-                        dialog.setOnTimeSetListener { hourOfDay, minute ->
+                        dialog.setOnTimeSetListener { input ->
                             MorningAlarmManager.change(
                                 MorningAlarmManager.getKeys()[position],
-                                hourOfDay,
-                                minute,
+                                input.hourOfDay,
+                                input.minute,
                                 {
                                     runBlocking {
                                         adapter.notifyDataSetChanged()
