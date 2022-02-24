@@ -1,4 +1,4 @@
-package com.example.morningalarm.android
+package com.example.morningalarm.android.ui
 
 import android.annotation.SuppressLint
 import android.os.Bundle
@@ -8,22 +8,24 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import android.view.Menu
-import com.example.morningalarm.android.databinding.ActivityMainBinding
+import com.example.morningalarm.android.MorningAlarmManager
+import com.example.morningalarm.android.R
+import com.example.morningalarm.android.databinding.ActivityMorningAlarmBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class MainActivity : AppCompatActivity() {
+class MorningAlarmActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
-    private lateinit var binding: ActivityMainBinding
+    private lateinit var binding: ActivityMorningAlarmBinding
 
 
     @SuppressLint("NotifyDataSetChanged")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        binding = ActivityMainBinding.inflate(layoutInflater)
+        binding = ActivityMorningAlarmBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         setSupportActionBar(binding.toolbar)
@@ -31,18 +33,6 @@ class MainActivity : AppCompatActivity() {
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         appBarConfiguration = AppBarConfiguration(navController.graph)
         setupActionBarWithNavController(navController, appBarConfiguration)
-
-        binding.addButton.setOnClickListener {
-            val dialog = TimePickerDialogFragment(this, 7, 0, true)
-            dialog.setOnTimeSetListener { hourOfDay, minute ->
-                MorningAlarmManager.add(hourOfDay, minute) {
-                    CoroutineScope(Dispatchers.Main).launch {
-                        AlarmsAdapter.notifyItemInserted(MorningAlarmManager.getKeys().size - 1)
-                    }
-                }
-            }
-            dialog.show(supportFragmentManager)
-        }
     }
 
 
