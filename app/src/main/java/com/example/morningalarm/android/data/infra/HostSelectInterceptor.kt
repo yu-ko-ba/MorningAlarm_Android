@@ -1,5 +1,6 @@
 package com.example.morningalarm.android.data.infra
 
+import android.content.Context
 import okhttp3.HttpUrl
 import okhttp3.Interceptor
 import okhttp3.Request
@@ -8,7 +9,10 @@ import okio.IOException
 import java.net.URISyntaxException
 
 // Based on https://medium.com/nerd-for-tech/change-retrofit-base-url-on-runtime-2036ef1dee44
-class HostSelectInterceptor constructor(private val preferenceHelper: PreferenceHelper) : Interceptor {
+class HostSelectInterceptor constructor(
+    private val context: Context,
+    private val preferenceHelper: PreferenceHelper = PreferenceHelper(context)
+) : Interceptor {
     private lateinit var host: HttpUrl
 
     init {

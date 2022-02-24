@@ -1,5 +1,6 @@
 package com.example.morningalarm.android.data.datasource.impl
 
+import android.content.Context
 import com.example.morningalarm.android.data.datasource.AlarmDataSource
 import com.example.morningalarm.android.data.infra.HostSelectInterceptor
 import com.example.morningalarm.android.data.infra.provider.ApiProvider
@@ -10,7 +11,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 class RemoteDataSource(
-    private val hostSelectInterceptor: HostSelectInterceptor,
+    private val context: Context,
+    private val hostSelectInterceptor: HostSelectInterceptor = HostSelectInterceptor(context),
     private val alarmApi: AlarmApi = ApiProvider(hostSelectInterceptor).alarmApi,
     private val fetchAlarmListResponseConverter: FetchAlarmListResponseConverter = FetchAlarmListResponseConverter()
 ): AlarmDataSource {
