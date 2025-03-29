@@ -3,10 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/FirstFragment">
+    app:startDestination="@id/AlarmListFragment">
 
     <fragment
-        android:id="@+id/FirstFragment"
-        android:name="com.example.morningalarm.android.FirstFragment"
-        tools:layout="@layout/fragment_first"/>
+        android:id="@+id/AlarmListFragment"
+        android:name="com.example.morningalarm.android.ui.AlarmListFragment"
+        tools:layout="@layout/fragment_alarm_list"/>
 </navigation>

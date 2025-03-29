@@ -1,4 +1,4 @@
-package com.example.morningalarm.android
+package com.example.morningalarm.android.ui
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -12,34 +12,57 @@ import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.appcompat.content.res.AppCompatResources
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.morningalarm.android.databinding.FragmentFirstBinding
+import com.example.morningalarm.android.MorningAlarmManager
+import com.example.morningalarm.android.R
+import com.example.morningalarm.android.data.datasource.impl.LocalDataSource
+import com.example.morningalarm.android.data.repository.AlarmRepository
+import com.example.morningalarm.android.databinding.FragmentAlarmListBinding
+import com.example.morningalarm.android.domain.usecase.addalarm.AddAlarmUseCase
+import com.example.morningalarm.android.domain.usecase.fetchalarmlist.FetchAlarmListUseCase
+import com.example.morningalarm.android.ui.uistate.SyncListUiState
+import com.example.morningalarm.android.ui.viewmodel.AlarmListViewModel
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.*
 
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.
  */
-class FirstFragment : Fragment() {
+class AlarmListFragment : Fragment() {
 
-    private var _binding: FragmentFirstBinding? = null
+    private var _binding: FragmentAlarmListBinding? = null
 
     // This property is only valid between onCreate and
     // onDestroyView.
-    private lateinit var binding: FragmentFirstBinding
+    private lateinit var binding: FragmentAlarmListBinding
 
     private lateinit var sharedPreferences: SharedPreferences
 
+    private lateinit var viewModel: AlarmListViewModel
+
+    private val alarmListAdapter = AlarmListAdapter()
 
     @SuppressLint("NotifyDataSetChanged")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        binding = FragmentFirstBinding.inflate(layoutInflater)
+        val localDataSource = LocalDataSource()
+        val alarmRepository = AlarmRepository(localDataSource)
+        viewModel = ViewModelProvider(
+            this,
+            AlarmListViewModel.Factory(
+                fetchAlarmListUseCase = FetchAlarmListUseCase(alarmRepository),
+                addAlarmUseCase = AddAlarmUseCase(alarmRepository)
+            )
+        )[AlarmListViewModel::class.java]
 
-        binding.swipeRefreshLayout.isRefreshing = true
+        binding = FragmentAlarmListBinding.inflate(layoutInflater)
 
         sharedPreferences = this.requireContext().getSharedPreferences(getString(R.string.preferences_name), Context.MODE_PRIVATE)
 
@@ -50,30 +73,39 @@ class FirstFragment : Fragment() {
             MorningAlarmManager.portNumber = it
         }
 
-        MorningAlarmManager.setOnOperationStartListener {
-            CoroutineScope(Dispatchers.Main).launch {
-                binding.swipeRefreshLayout.isRefreshing = true
-            }
-        }
-        MorningAlarmManager.setOnSucceedListener {
-            CoroutineScope(Dispatchers.Main).launch {
-                binding.swipeRefreshLayout.isRefreshing = false
-            }
-        }
-        MorningAlarmManager.setOnFailedListener {
-            runBlocking {
-                delay(5000)
-            }
-            CoroutineScope(Dispatchers.Main).launch {
-                binding.swipeRefreshLayout.isRefreshing = false
-                Snackbar.make(binding.root, getString(R.string.sync_failed), Snackbar.LENGTH_LONG)
-                    .show()
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.alarmListItemUiState.collect { uiState ->
+                    alarmListAdapter.submitList(uiState)
+                }
             }
         }
 
-        MorningAlarmManager.get {
-            CoroutineScope(Dispatchers.Main).launch {
-                AlarmsAdapter.notifyDataSetChanged()
+        lifecycleScope.launch{
+            repeatOnLifecycle(Lifecycle.State.STARTED){
+                viewModel.syncListUiState.collect {
+                    binding.swipeRefreshLayout.isRefreshing = it.isRefreshing
+
+                    when(it){
+                        SyncListUiState.Success -> {
+                            Snackbar.make(
+                                binding.root,
+                                getString(R.string.sync_successful),
+                                Snackbar.LENGTH_LONG
+                            ).show()
+                        }
+                        SyncListUiState.Failure -> {
+                            Snackbar.make(
+                                binding.root,
+                                getString(R.string.sync_failed),
+                                Snackbar.LENGTH_LONG
+                            ).show()
+                        }
+                        else -> {
+                            // noop
+                        }
+                    }
+                }
             }
         }
     }
@@ -84,7 +116,7 @@ class FirstFragment : Fragment() {
             savedInstanceState: Bundle?
     ): View {
 
-        _binding = FragmentFirstBinding.inflate(inflater, container, false)
+        _binding = FragmentAlarmListBinding.inflate(inflater, container, false)
         return binding.root
 
     }
@@ -95,43 +127,40 @@ class FirstFragment : Fragment() {
 
         setHasOptionsMenu(true)
 
-        binding.alarmsRecyclerView.layoutManager = LinearLayoutManager(this.requireContext())
+        binding.alarmListRecyclerView.layoutManager = LinearLayoutManager(this.requireContext())
         val keys = mutableListOf<String>()
         for (key in MorningAlarmManager.getKeys()) {
             keys.add(key)
         }
-        getSwipeActionHelper(AlarmsAdapter).attachToRecyclerView(binding.alarmsRecyclerView)
-        binding.alarmsRecyclerView.adapter = AlarmsAdapter
+        getSwipeActionHelper(alarmListAdapter).attachToRecyclerView(binding.alarmListRecyclerView)
+        binding.alarmListRecyclerView.adapter = alarmListAdapter
 
         binding.swipeRefreshLayout.setOnRefreshListener {
-            refreshItems()
+            viewModel.fetchAlarmList()
         }
-    }
 
-
-    @SuppressLint("NotifyDataSetChanged")
-    private fun refreshItems() {
-        MorningAlarmManager.get {
-            CoroutineScope(Dispatchers.Main).launch {
-                AlarmsAdapter.notifyDataSetChanged()
+        binding.addButton.setOnClickListener {
+            val dialog = TimePickerDialogFragment(requireContext(), 7, 0, true)
+            dialog.setOnTimeSetListener { input ->
+                viewModel.addAlarm(input)
             }
+            dialog.show(childFragmentManager)
         }
     }
-
 
     @SuppressLint("CutPasteId", "NotifyDataSetChanged")
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_settings -> {
                 val view = this.layoutInflater.inflate(R.layout.dialog_settings, null)
-                view.findViewById<EditText>(R.id.serverAddress).hint = MorningAlarmManager.serverAddress
+                view.findViewById<EditText>(R.id.serverAddress).hint =
+                    MorningAlarmManager.serverAddress
                 view.findViewById<EditText>(R.id.portNumber).hint = MorningAlarmManager.portNumber
 
                 AlertDialog.Builder(this.requireContext())
                     .setTitle(getString(R.string.settings))
                     .setView(view)
                     .setPositiveButton(getString(R.string.ok)) { _, _ ->
-                        binding.swipeRefreshLayout.isRefreshing = true
 
                         val serverAddress =
                             view.findViewById<EditText>(R.id.serverAddress).text.toString()
@@ -149,14 +178,7 @@ class FirstFragment : Fragment() {
                             sharedPreferences.edit()
                                 .putString(getString(R.string.port_number_key), portNumber).apply()
                         }
-
-                        MorningAlarmManager.get {
-                            CoroutineScope(Dispatchers.Main).launch {
-                                Snackbar.make(binding.root, getString(R.string.sync_successful), Snackbar.LENGTH_LONG)
-                                    .show()
-                                AlarmsAdapter.notifyDataSetChanged()
-                            }
-                        }
+                        viewModel.fetchAlarmList()
                     }
                     .setNegativeButton(getString(R.string.cancel)) { dialog, _ ->
                         dialog.cancel()
@@ -169,7 +191,7 @@ class FirstFragment : Fragment() {
     }
 
 
-    private fun getSwipeActionHelper(adapter: AlarmsAdapter) =
+    private fun getSwipeActionHelper(adapter: AlarmListAdapter) =
         ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(
             ItemTouchHelper.ACTION_STATE_IDLE,
             ItemTouchHelper.RIGHT or ItemTouchHelper.LEFT
@@ -191,11 +213,11 @@ class FirstFragment : Fragment() {
                     ItemTouchHelper.LEFT -> {
                         // 時間を変更する
                         val dialog = TimePickerDialogFragment(requireContext(), 7, 0, true)
-                        dialog.setOnTimeSetListener { hourOfDay, minute ->
+                        dialog.setOnTimeSetListener { input ->
                             MorningAlarmManager.change(
                                 MorningAlarmManager.getKeys()[position],
-                                hourOfDay,
-                                minute,
+                                input.hourOfDay,
+                                input.minute,
                                 {
                                     runBlocking {
                                         adapter.notifyDataSetChanged()
@@ -269,7 +291,9 @@ class FirstFragment : Fragment() {
                         itemView.bottom
                     )
 
-                    val changeIcon = AppCompatResources.getDrawable(this@FirstFragment.requireContext(), R.drawable.ic_baseline_settings_24)!!
+                    val changeIcon = AppCompatResources.getDrawable(this@AlarmListFragment.requireContext(),
+                        R.drawable.ic_baseline_settings_24
+                    )!!
                     val iconMargin = (itemView.height - changeIcon.intrinsicHeight) / 2
                     changeIcon.setBounds(
                         itemView.right - iconMargin - changeIcon.intrinsicWidth,
@@ -290,7 +314,9 @@ class FirstFragment : Fragment() {
                         itemView.bottom
                     )
 
-                    val deleteIcon = AppCompatResources.getDrawable(this@FirstFragment.requireContext(), R.drawable.ic_baseline_delete_24)!!
+                    val deleteIcon = AppCompatResources.getDrawable(this@AlarmListFragment.requireContext(),
+                        R.drawable.ic_baseline_delete_24
+                    )!!
                     val iconMargin = (itemView.height - deleteIcon.intrinsicHeight) / 2
                     deleteIcon.setBounds(
                         itemView.left + iconMargin,
